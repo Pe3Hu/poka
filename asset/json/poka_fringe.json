@@ -1,0 +1,62 @@
+[
+ {
+  "index": 0,
+  "x": 0,
+  "y": 2,
+  "shape": "rhomb"
+ },
+ {
+  "index": 1,
+  "x": 1,
+  "y": 1,
+  "shape": "triangle"
+ },
+ {
+  "index": 2,
+  "x": 1,
+  "y": 2,
+  "shape": "triangle"
+ },
+ {
+  "index": 3,
+  "x": 2,
+  "y": 0,
+  "shape": "rhomb"
+ },
+ {
+  "index": 4,
+  "x": 2,
+  "y": 1,
+  "shape": "triangle"
+ },
+ {
+  "index": 5,
+  "x": 2,
+  "y": 2,
+  "shape": "rectangle"
+ },
+ {
+  "index": 6,
+  "x": 2,
+  "y": 3,
+  "shape": "trapeze"
+ },
+ {
+  "index": 7,
+  "x": 3,
+  "y": 2,
+  "shape": "trapeze"
+ },
+ {
+  "index": 8,
+  "x": 3,
+  "y": 3,
+  "shape": "trapeze"
+ },
+ {
+  "index": 9,
+  "x": 4,
+  "y": 4,
+  "shape": "rectangle"
+ }
+]
