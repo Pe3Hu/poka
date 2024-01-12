@@ -256,7 +256,7 @@ func design_rectangle_shape() -> void:
 	var description = Global.dict.fringe.index[axises.index]
 	var _cords = []
 	
-	if description.size.x < 2:
+	if description.size.x == 2:
 		var axis = Global.arr.axis.pick_random()
 		var cord = axises.cord[axis].pick_random()
 		_cords.append(cord)
