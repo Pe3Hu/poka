@@ -1,6 +1,7 @@
 extends MarginContainer
 
 
+#region vars
 @onready var index = $VBox/Index
 
 var proprietor = null
@@ -9,8 +10,9 @@ var cords = []
 var stars = []
 var trefoils = []
 var gaps = []
+#endregion
 
-
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	proprietor = input_.proprietor
 	shape = input_.shape
@@ -28,9 +30,9 @@ func init_basic_setting() -> void:
 func init_index() -> void:
 	var input = {}
 	input.type = "number"
-	input.subtype = Global.num.index.constellation
+	input.subtype = Global.num.index.fusion
 	index.set_attributes(input)
-	Global.num.index.constellation += 1
+	Global.num.index.fusion += 1
 
 
 func init_stars() -> void:
@@ -132,7 +134,8 @@ func roll_trefoil_vocations() -> void:
 		match trefoils.size():
 			2:
 				var trefoil = trefoils.pick_random()
-				if trefoil.square == 2:
+				
+				if trefoil.square == 2 or shape == "trapeze":
 					revocation_from_neighbors(trefoil)
 			3:
 				for trefoil in trefoils:
@@ -142,13 +145,14 @@ func roll_trefoil_vocations() -> void:
 
 func add_trefoil(stars_: Array) -> void:
 	var input = {}
-	input.constellation = self
+	input.fusion = self
 	input.stars = []
 	input.stars.append_array(stars_)
 	
 	var trefoil = Global.scene.trefoil.instantiate()
 	proprietor.trefoils.add_child(trefoil)
 	trefoil.set_attributes(input)
+#endregion
 
 
 func check_stars_on_one_side(stars_: Array) -> bool:
@@ -205,3 +209,11 @@ func revocation_from_neighbors(trefoil_: Polygon2D) -> void:
 		neighbor = neighbors.pick_random()
 	
 	trefoil_.revocation_from(neighbor)
+
+
+func turn(shift_: int) -> void:
+	var index = (shift_ + 1 ) / 2
+	var direction = Global.arr.turn[index]
+	
+	for trefoil in trefoils:
+		trefoil.turn(direction)

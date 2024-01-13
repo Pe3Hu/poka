@@ -1,11 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://cnqwjdpy5q073"]
 
-[ext_resource type="Script" path="res://scene/3/constellation.gd" id="1_471y7"]
-[ext_resource type="PackedScene" uid="uid://ciw38iqel0v5a" path="res://scene/0/icon.tscn" id="2_lp44s"]
+[ext_resource type="Script" path="res://scene/3/fusion.gd" id="1_df15b"]
+[ext_resource type="PackedScene" uid="uid://ciw38iqel0v5a" path="res://scene/0/icon.tscn" id="2_5u0j5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7paps"]
 
-[node name="Constellation" type="MarginContainer"]
+[node name="Fusion" type="MarginContainer"]
 custom_minimum_size = Vector2(5, 5)
 anchors_preset = 8
 anchor_left = 0.5
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("1_471y7")
+script = ExtResource("1_df15b")
 
 [node name="BG" type="Panel" parent="."]
 layout_mode = 2
@@ -31,5 +31,5 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Index" parent="VBox" instance=ExtResource("2_lp44s")]
+[node name="Index" parent="VBox" instance=ExtResource("2_5u0j5")]
 layout_mode = 2

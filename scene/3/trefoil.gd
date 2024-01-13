@@ -1,26 +1,29 @@
 extends Polygon2D
 
 
+#region vars
 @onready var index = $Index
 
-var constellation = null
+var fusion = null
 var stars = null
 var indent = null
 var vocation = null
 var crux = null
 var square = null
 var neighbors = []
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
-	constellation = input_.constellation
+	fusion = input_.fusion
 	stars = input_.stars
 	
 	init_basic_setting()
 
 
 func init_basic_setting() -> void:
-	constellation.trefoils.append(self)
+	fusion.trefoils.append(self)
 	init_index()
 	set_vertexs()
 
@@ -47,12 +50,14 @@ func set_vertexs() -> void:
 	
 	set_polygon(vertexs)
 
+#endregion
+
 
 func roll_vocation() -> void:
 	var cruxs = []
 	cruxs.append_array(Global.dict.vocation.crux.keys())
 	
-	for trefoil in constellation.trefoils:
+	for trefoil in fusion.trefoils:
 		cruxs.erase(trefoil.crux)
 	
 	crux = cruxs.pick_random()
@@ -92,14 +97,14 @@ func merge_with(trefoil_: Polygon2D) -> void:
 			var triplet = [star]
 			triplet.append_array(singles)
 			
-			if !constellation.check_stars_on_one_side(triplet):
+			if !fusion.check_stars_on_one_side(triplet):
 				stars.append_array(triplet)
 				set_vertexs()
 				break
 	
-	constellation.trefoils.erase(trefoil_)
-	constellation.proprietor.trefoils.remove_child(trefoil_)
-	constellation.gaps.append(trefoil_.index.get_number())
+	fusion.trefoils.erase(trefoil_)
+	fusion.proprietor.trefoils.remove_child(trefoil_)
+	fusion.gaps.append(trefoil_.index.get_number())
 	trefoil_.queue_free()
 
 
@@ -114,3 +119,14 @@ func revocation_from(trefoil_: Polygon2D) -> void:
 	crux = trefoil_.crux
 	vocation = trefoil_.vocation
 	paint_based_on_vocation()
+
+
+func turn(direction_: String) -> void:
+	var turned_stars = []
+	
+	for star in stars:
+		var _star = fusion.proprietor.turns.star[direction_][star]
+		turned_stars.append(_star)
+	
+	stars = turned_stars
+	set_vertexs()

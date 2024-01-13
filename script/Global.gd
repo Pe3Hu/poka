@@ -37,6 +37,7 @@ func init_arr() -> void:
 	arr.organ = ["supplier", "fringe"]
 	arr.axis = ["x", "y"]
 	arr.side = ["up", "right", "down", "left"]
+	arr.turn = ["clockwise", "counterclockwise"]
 
 
 func init_num() -> void:
@@ -44,12 +45,16 @@ func init_num() -> void:
 	num.index.star = 0
 	num.index.cord = 0
 	num.index.block = 0
-	num.index.constellation = 0
+	num.index.socket = 0
+	num.index.fusion = 0
 	num.index.trefoil = 0
 	
+	num.socket = {}
+	num.socket.half = 2
+	num.socket.n = num.socket.half * 2 + 1
 	
 	num.sky = {}
-	num.sky.col = 7
+	num.sky.col = num.socket.n * 2 + 1 
 	num.sky.row = num.sky.col
 	
 	num.subsoil = {}
@@ -212,7 +217,6 @@ func init_vocation() -> void:
 		color.vocation[vocation.title] = Color.from_hsv(vocation.hue / 360.0, 0.9, 0.7)
 
 
-
 func init_node() -> void:
 	node.game = get_node("/root/Game")
 
@@ -227,8 +231,9 @@ func init_scene() -> void:
 	scene.star = load("res://scene/2/star.tscn")
 	scene.cord = load("res://scene/2/cord.tscn")
 	scene.block = load("res://scene/2/block.tscn")
+	scene.socket = load("res://scene/2/socket.tscn")
 	
-	scene.constellation = load("res://scene/3/constellation.tscn")
+	scene.fusion = load("res://scene/3/fusion.tscn")
 	scene.trefoil = load("res://scene/3/trefoil.tscn")
 
 

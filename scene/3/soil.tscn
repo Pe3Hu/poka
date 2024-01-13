@@ -31,7 +31,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_7paps")
 layout_mode = 2
 alignment = 1
 
-[node name="Constellations" type="VBoxContainer" parent="HBox"]
+[node name="Fusions" type="VBoxContainer" parent="HBox"]
 layout_mode = 2
 alignment = 1
 

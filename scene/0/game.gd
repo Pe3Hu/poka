@@ -24,6 +24,12 @@ func _input(event) -> void:
 			KEY_D:
 				if event.is_pressed() && !event.is_echo():
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.shift_axises_index(1)
+			KEY_Q:
+				if event.is_pressed() && !event.is_echo():
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_constellation(-1)
+			KEY_E:
+				if event.is_pressed() && !event.is_echo():
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_constellation(1)
 
 
 

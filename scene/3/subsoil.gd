@@ -1,30 +1,35 @@
 extends MarginContainer
 
 
+#region vars
 @onready var bg = $BG
 @onready var stars = $Stars
 @onready var cords = $Cords
 @onready var blocks = $Blocks
 @onready var trefoils = $Trefoils
-@onready var constellations = $Constellations
+@onready var fusions = $Fusions
 
-var vastness = null
+var soil = null
+var sky = null
 var center = null
 var grids = {}
 var fringe = {}
 var axises = {}
 var sides = {}
 var cycle = []
-var decors = {} 
+var decors = {}
+var turns = {}
+#endregion
 
 
 func set_attributes(input_: Dictionary) -> void:
-	vastness = input_.vastness
+	soil = input_.soil
 	
 	init_basic_setting()
 
 
 func init_basic_setting() -> void:
+	sky = soil.vastness.horizon.sky
 	custom_minimum_size = Vector2(Global.vec.size.subsoil)
 	center = custom_minimum_size * 0.5
 	
@@ -32,16 +37,18 @@ func init_basic_setting() -> void:
 	init_cords()
 	init_blocks()
 	init_cycle()
+	init_turns()
 	trefoils.position = center
-	init_constellation()
+	init_fusion()
 
 
+#region init star and cord scenes
 func init_stars() -> void:
 	var corners = {}
 	corners.x = [0, Global.num.subsoil.col - 1]
 	corners.y = [0, Global.num.subsoil.row - 1]
 	var scenes = ["star", "cord"]
-	var keys = ["axis", "side"]
+	var keys = ["axis", "side", "turn"]
 	stars.position = center
 	grids.star = {}
 	
@@ -58,6 +65,9 @@ func init_stars() -> void:
 			
 			for _key in Global.arr[key]:
 				dict[scene][_key] = []
+				
+				if key == "turn":
+					dict[scene][_key] = {}
 	
 	for _i in Global.num.subsoil.row:
 		for _j in Global.num.subsoil.col:
@@ -115,8 +125,10 @@ func add_cord(first_: Polygon2D, second_: Polygon2D, direction_: Vector2) -> voi
 	index = (index + Global.num.star.quartet / 2) % Global.num.star.quartet
 	second_.directions[Global.dict.neighbor.linear2[index]] = cord
 	cord.update_axis()
+#endregion
 
 
+#region init block scenes
 func init_blocks() -> void:
 	grids.block = {}
 	blocks.position = center
@@ -151,14 +163,6 @@ func add_block(_cords: Array) -> void:
 	var block = Global.scene.block.instantiate()
 	blocks.add_child(block)
 	block.set_attributes(input)
-	
-	#var ring = rings.block.keys().back()
-	#var l = Global.num.star.quartet * (ring * 2 - 1)
-	#rings.block[ring].append(block)
-	#block.ring = ring
-		#
-	#if rings.block[ring].size() == l:
-		#rings.block[ring + 1] = []
 
 
 func init_blocks_neighbors() -> void:
@@ -170,6 +174,7 @@ func init_blocks_neighbors() -> void:
 				var block = cord.blocks[_i]
 				var neighbor = cord.blocks[(_i + 1) % n]
 				block.neighbors[neighbor] = cord
+#endregion
 
 
 func init_cycle() -> void:
@@ -195,11 +200,31 @@ func init_cycle() -> void:
 	#decors.star.set_status("occupied")
 
 
-func init_constellation() -> void:
-	axises.index = 8
+func init_turns() -> void:
+	var shifts = {}
+	shifts.clockwise = 2
+	shifts.counterclockwise = -2
+	
+	for _i in cycle.size():
+		var star = cycle[_i]
+		
+		for turn in shifts:
+			var shift = shifts[turn]
+			var _j = (_i + shift + cycle.size()) % cycle.size()
+			turns.star[turn][star] = cycle[_j]
+	
+	for turn in Global.arr.turn:
+		turns.star[turn][decors.star] = decors.star
+
+
+func init_fusion() -> void:
+	axises.index = 11
 	design_shape()
+	var block = sky.slots.option.front()
+	take_to_sky(block)
 
 
+#region of design shape
 func design_shape() -> void:
 	reset()
 	var description = Global.dict.fringe.index[axises.index]
@@ -220,7 +245,7 @@ func design_rhomb_shape() -> void:
 	_cords.append(cord)
 	
 	
-	add_constellation(_cords)
+	add_fusion(_cords)
 
 
 func design_triangle_shape() -> void:
@@ -249,7 +274,7 @@ func design_triangle_shape() -> void:
 			if _cord != cord:
 				_cords.append(_cord)
 	
-	add_constellation(_cords)
+	add_fusion(_cords)
 
 
 func design_rectangle_shape() -> void:
@@ -269,7 +294,7 @@ func design_rectangle_shape() -> void:
 		for axis in Global.arr.axis:
 			_cords.append_array(axises.cord[axis])
 	
-	add_constellation(_cords)
+	add_fusion(_cords)
 
 
 func design_trapeze_shape() -> void:
@@ -303,7 +328,7 @@ func design_trapeze_shape() -> void:
 				
 				break
 	
-	add_constellation(_cords)
+	add_fusion(_cords)
 
 
 func design_deadlock_shape() -> void:
@@ -329,18 +354,20 @@ func design_deadlock_shape() -> void:
 				
 				break
 	
-	add_constellation(_cords)
+	add_fusion(_cords)
+
+#endregion
 
 
-func add_constellation(cords_: Array) -> void:
+func add_fusion(cords_: Array) -> void:
 	var input = {}
 	input.proprietor = self
 	input.cords = cords_
 	input.shape = Global.dict.fringe.index[axises.index].shape
 	
-	var constellation = Global.scene.constellation.instantiate()
-	constellations.add_child(constellation)
-	constellation.set_attributes(input)
+	var fusion = Global.scene.fusion.instantiate()
+	fusions.add_child(fusion)
+	fusion.set_attributes(input)
 
 
 func shift_axises_index(shift_: int) -> void:
@@ -350,12 +377,23 @@ func shift_axises_index(shift_: int) -> void:
 
 
 func reset() -> void:
-	if constellations.get_child_count() > 0:
-		var constellation = constellations.get_child(0)
-		constellations.remove_child(constellation)
-		constellation.queue_free()
+	if fusions.get_child_count() > 0:
+		var fusion = fusions.get_child(0)
+		fusions.remove_child(fusion)
+		fusion.queue_free()
 		
 		while trefoils.get_child_count() > 0:
 			var trefoil = trefoils.get_child(0)
 			trefoils.remove_child(trefoil)
 			trefoil.queue_free()
+
+
+func turn_fusion(shift_: int) -> void:
+	var fusion = fusions.get_child(0)
+	fusion.turn(shift_)
+
+
+func take_to_sky(block_: Polygon2D) -> void:
+	var fusion = fusions.get_child(0)
+	fusions.remove_child(fusion)
+	soil.fusions.add_child(fusion)

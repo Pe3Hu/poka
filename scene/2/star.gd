@@ -1,6 +1,7 @@
 extends Polygon2D
 
 
+#region vars
 @onready var index = $Index
 
 var proprietor = null
@@ -9,12 +10,14 @@ var neighbors = {}
 var cords = {}
 var blocks = []
 var directions = {}
-var constellations = []
+var trefoils = []
 var status = null
 var temperature = null
 var sides = []
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	proprietor = input_.proprietor
 	grid = input_.grid
@@ -53,8 +56,8 @@ func init_index() -> void:
 	Global.num.index.star += 1
 
 
-func add_constellation(constellation_: MarginContainer) -> void:
-	constellations.append(constellation_)
+func add_trefoil(trefoil_: Polygon2D) -> void:
+	trefoils.append(trefoil_)
 	
 	set_status("occupied")
 
@@ -65,6 +68,7 @@ func set_status(status_: String) -> void:
 		
 		paint_to_match()
 
+#endregion
 
 func paint_to_match() -> void:
 	color = Global.color.star[status]

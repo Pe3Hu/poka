@@ -1,20 +1,24 @@
 extends MarginContainer
 
 
+#region vars
 @onready var bg = $BG
 @onready var stars = $Stars
 @onready var cords = $Cords
 @onready var blocks = $Blocks
 @onready var trefoils = $Trefoils
+@onready var sockets = $Sockets
 
-var vastness = null
+var horizon = null
 var center = null
 var grids = {}
 var rings = {}
+var slots = {}
+#endregion
 
 
 func set_attributes(input_: Dictionary) -> void:
-	vastness = input_.vastness
+	horizon = input_.horizon
 	
 	init_basic_setting()
 
@@ -26,9 +30,11 @@ func init_basic_setting() -> void:
 	init_stars()
 	init_cords()
 	init_blocks()
+	init_sockets()
 	trefoils.position = center
 
 
+#region init star and cord scenes
 func init_stars() -> void:
 	grids.star = {}
 	stars.position = center
@@ -75,8 +81,10 @@ func add_cord(first_: Polygon2D, second_: Polygon2D, direction_: Vector2) -> voi
 	var index = Global.dict.neighbor.linear2.find(direction_)
 	index = (index + Global.num.star.quartet / 2) % Global.num.star.quartet
 	second_.directions[Global.dict.neighbor.linear2[index]] = cord
+#endregion
 
 
+#region init block scenes
 func init_blocks() -> void:
 	grids.block = {}
 	blocks.position = center
@@ -94,15 +102,11 @@ func init_blocks() -> void:
 				_cords.append(cord)
 				grid += direction
 				_star = grids.star[grid]
-				#_star = cord.get_another_star(_star)
 		
 		if _cords.size() == Global.num.star.quartet:
 			add_block(_cords)
 	
 	init_blocks_neighbors()
-	
-	for block in blocks.get_children():
-		block.paint_based_on_index()
 
 
 func add_block(_cords: Array) -> void:
@@ -113,14 +117,6 @@ func add_block(_cords: Array) -> void:
 	var block = Global.scene.block.instantiate()
 	blocks.add_child(block)
 	block.set_attributes(input)
-	
-	#var ring = rings.block.keys().back()
-	#var l = Global.num.star.quartet * (ring * 2 - 1)
-	#rings.block[ring].append(block)
-	#block.ring = ring
-		#
-	#if rings.block[ring].size() == l:
-		#rings.block[ring + 1] = []
 
 
 func init_blocks_neighbors() -> void:
@@ -132,29 +128,39 @@ func init_blocks_neighbors() -> void:
 				var block = cord.blocks[_i]
 				var neighbor = cord.blocks[(_i + 1) % n]
 				block.neighbors[neighbor] = cord
+#endregion
 
 
-func init_constellations() -> void:
-	for _i in 3:
-		var dimensions = 6
-		add_constellation(dimensions)
-
-
-func add_constellation(dimensions_: int) -> void:
-	var input = {}
-	input.proprietor = self
-	input.blocks = []
+func init_sockets() -> void:
+	grids.socket = {}
+	sockets.position = center
 	
-	for _i in dimensions_:
-		var options = fill_block_options(input.blocks)
-		var block = Global.get_random_key(options)
-		
-		if block != null:
-			input.blocks.append(block)
+	for _i in range(1, Global.num.sky.row, 2):
+		for _j in range(1, Global.num.sky.col, 2):
+			var input = {}
+			input.proprietor = self
+			input.core = grids.star[Vector2(_j, _i)]
 	
-	var constellation = Global.scene.constellation.instantiate()
-	vastness.constellations.add_child(constellation)
-	constellation.set_attributes(input)
+			var socket = Global.scene.socket.instantiate()
+			sockets.add_child(socket)
+			socket.set_attributes(input)
+	
+	#for socket in sockets.get_children():
+	#	socket.paint_based_on_index()
+	
+	slots.option = []
+	slots.incomplete = []
+	slots.completed = []
+	var grid = Vector2.ONE * Global.num.socket.half 
+	var socket = grids.socket[grid]
+	slots.option.append(socket)
+
+
+func update_slots() -> void:
+	if slots.option.is_empty():
+		var grid = Vector2(1, 1)
+		var block = grids.block[grid]
+		slots.option.append(block)
 
 
 func fill_block_options(blocks_: Array) -> Dictionary:

@@ -21,7 +21,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_d232a")
 
-[node name="Constellations" type="VBoxContainer" parent="."]
+[node name="Fusions" type="VBoxContainer" parent="."]
 layout_mode = 2
 alignment = 1
 

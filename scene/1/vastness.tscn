@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cv5qkmd5pg33l"]
 
-[ext_resource type="PackedScene" uid="uid://bqlwa55pi1gab" path="res://scene/2/sky.tscn" id="1_lj7iv"]
-[ext_resource type="Script" path="res://scene/2/vastness.gd" id="1_q3gni"]
+[ext_resource type="Script" path="res://scene/1/vastness.gd" id="1_q3gni"]
+[ext_resource type="PackedScene" uid="uid://c1uc3a2x31rrl" path="res://scene/2/horizon.tscn" id="2_3a7xf"]
 [ext_resource type="PackedScene" uid="uid://iw1wrtwekp8h" path="res://scene/3/soil.tscn" id="3_5s8gj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7paps"]
@@ -35,7 +35,7 @@ alignment = 1
 layout_mode = 2
 alignment = 1
 
-[node name="Sky" parent="VBox/HBox" instance=ExtResource("1_lj7iv")]
+[node name="Horizon" parent="VBox/HBox" instance=ExtResource("2_3a7xf")]
 layout_mode = 2
 
 [node name="Soil" parent="VBox/HBox" instance=ExtResource("3_5s8gj")]

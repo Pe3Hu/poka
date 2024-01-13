@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://csayfdsvl4lho"]
+
+[ext_resource type="Script" path="res://scene/2/socket.gd" id="1_ui62p"]
+[ext_resource type="PackedScene" uid="uid://ciw38iqel0v5a" path="res://scene/0/icon.tscn" id="2_lwfk8"]
+
+[node name="Socket" type="Polygon2D"]
+color = Color(0.709804, 0.709804, 0.709804, 1)
+script = ExtResource("1_ui62p")
+
+[node name="Index" parent="." instance=ExtResource("2_lwfk8")]
+visible = false

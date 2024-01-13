@@ -1,6 +1,7 @@
 extends Polygon2D
 
 
+#region vars
 @onready var indexBlock = $IndexBlock
 @onready var indexOrgan = $IndexOrgan
 
@@ -13,8 +14,10 @@ var kind = null
 var status = null
 var ring = null
 var organ = null
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	proprietor = input_.proprietor
 	
@@ -33,6 +36,9 @@ func init_basic_setting(input_: Dictionary) -> void:
 		stars.append(star)
 		star.blocks.append(self)
 		grid += star.grid
+	
+	grid -= Vector2.ONE * 2
+	grid /= 4
 	
 	proprietor.grids.block[grid] = self
 	
@@ -69,6 +75,7 @@ func set_status(status_: String) -> void:
 	status = status_
 	
 	paint_to_match()
+#endregion
 
 
 func set_kind(kind_: String) -> void:

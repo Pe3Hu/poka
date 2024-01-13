@@ -1,6 +1,7 @@
 extends Line2D
 
 
+#region vars
 @onready var index = $Index
 
 var proprietor = null
@@ -9,8 +10,10 @@ var blocks = []
 var kind = null
 var status = null
 var side = null
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	proprietor = input_.proprietor
 	stars = input_.stars
@@ -40,6 +43,8 @@ func set_vertexs() -> void:
 	index.position /= stars.size()
 	index.position.x -= index.custom_minimum_size.x * 0.5
 	index.position.y -= index.custom_minimum_size.y * 0.5
+
+#endregion
 
 
 func get_another_star(star_: Polygon2D) -> Variant:
@@ -92,4 +97,4 @@ func update_side() -> void:
 		if sides[_side] == 2:
 			side = _side
 			proprietor.sides.cord[side].append(self)
-	
+

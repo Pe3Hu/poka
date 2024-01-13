@@ -1,8 +1,8 @@
 extends MarginContainer
 
 
-@onready var fusions = $HBox/Fusions
-@onready var subsoil = $HBox/Subsoil
+@onready var constellations = $HBox/Constellations
+@onready var sky = $HBox/Sky
 
 var vastness = null
 
@@ -15,5 +15,5 @@ func set_attributes(input_: Dictionary) -> void:
 
 func init_basic_setting() -> void:
 	var input = {}
-	input.soil = self
-	subsoil.set_attributes(input)
+	input.horizon = self
+	sky.set_attributes(input)
