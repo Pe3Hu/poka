@@ -62,13 +62,20 @@ func init_num() -> void:
 	
 	num.cord = {}
 	num.cord.l = 30
+	
+	num.trefoil = {}
+	num.trefoil.square = num.cord.l * num.cord.l * 0.5
 
 
 func init_dict() -> void:
 	init_neighbor()
 	init_corner()
+	init_side()
 	init_fringe()
-	
+	init_vocation()
+
+
+func init_side() -> void:
 	dict.side = {}
 	dict.side.x = ["left", "right"]
 	dict.side.y = ["up", "down"]
@@ -177,6 +184,33 @@ func init_fringe() -> void:
 			dict.fringe.shape[fringe.shape] = []
 		
 		dict.fringe.shape[fringe.shape].append(fringe.index)
+
+
+func init_vocation() -> void:
+	dict.vocation = {}
+	dict.vocation.title = {}
+	dict.vocation.crux = {}
+	color.vocation = {}
+	
+	var path = "res://asset/json/poka_vocation.json"
+	var array = load_data(path)
+	var exceptions = ["title", "hue"]
+	
+	for vocation in array:
+		var data = {}
+		
+		for key in vocation:
+			if !exceptions.has(key):
+				data[key] = vocation[key]
+		
+		dict.vocation.title[vocation.title] = data
+		
+		if !dict.vocation.crux.has(vocation.crux):
+			dict.vocation.crux[vocation.crux] = {}
+		
+		dict.vocation.crux[vocation.crux][vocation.title] = vocation.rarity
+		color.vocation[vocation.title] = Color.from_hsv(vocation.hue / 360.0, 0.9, 0.7)
+
 
 
 func init_node() -> void:

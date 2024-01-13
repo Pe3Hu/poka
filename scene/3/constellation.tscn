@@ -33,13 +33,3 @@ alignment = 1
 
 [node name="Index" parent="VBox" instance=ExtResource("2_lp44s")]
 layout_mode = 2
-
-[node name="Consumers" type="VBoxContainer" parent="VBox"]
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 1
-
-[node name="Suppliers" type="VBoxContainer" parent="VBox"]
-layout_mode = 2
-theme_override_constants/separation = 0
-alignment = 1

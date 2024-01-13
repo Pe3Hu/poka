@@ -92,3 +92,4 @@ func update_side() -> void:
 		if sides[_side] == 2:
 			side = _side
 			proprietor.sides.cord[side].append(self)
+	

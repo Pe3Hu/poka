@@ -6,6 +6,10 @@ extends Polygon2D
 var constellation = null
 var stars = null
 var indent = null
+var vocation = null
+var crux = null
+var square = null
+var neighbors = []
 
 
 func set_attributes(input_: Dictionary) -> void:
@@ -44,6 +48,23 @@ func set_vertexs() -> void:
 	set_polygon(vertexs)
 
 
+func roll_vocation() -> void:
+	var cruxs = []
+	cruxs.append_array(Global.dict.vocation.crux.keys())
+	
+	for trefoil in constellation.trefoils:
+		cruxs.erase(trefoil.crux)
+	
+	crux = cruxs.pick_random()
+	vocation = Global.get_random_key(Global.dict.vocation.crux[crux])
+	calculate_square()
+	paint_based_on_vocation()
+
+
+func paint_based_on_vocation() -> void:
+	color = Global.color.vocation[vocation]
+
+
 func paint_based_on_index() -> void:
 	var hue = index.get_number() * 1.0 / Global.num.index.trefoil
 	color = Color.from_hsv(hue, 0.6, 0.7)
@@ -80,3 +101,16 @@ func merge_with(trefoil_: Polygon2D) -> void:
 	constellation.proprietor.trefoils.remove_child(trefoil_)
 	constellation.gaps.append(trefoil_.index.get_number())
 	trefoil_.queue_free()
+
+
+func calculate_square() -> void:
+	var a = stars[0].position
+	var b = stars[1].position
+	var c = stars[2].position
+	square = int(abs(a.x * (b.y - c.y) + b.x *(c.y - a.y) + c.x * (a.y - b.y)) * 0.5 / Global.num.trefoil.square)
+
+
+func revocation_from(trefoil_: Polygon2D) -> void:
+	crux = trefoil_.crux
+	vocation = trefoil_.vocation
+	paint_based_on_vocation()

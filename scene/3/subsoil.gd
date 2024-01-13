@@ -15,6 +15,7 @@ var fringe = {}
 var axises = {}
 var sides = {}
 var cycle = []
+var decors = {} 
 
 
 func set_attributes(input_: Dictionary) -> void:
@@ -31,6 +32,7 @@ func init_basic_setting() -> void:
 	init_cords()
 	init_blocks()
 	init_cycle()
+	trefoils.position = center
 	init_constellation()
 
 
@@ -56,8 +58,6 @@ func init_stars() -> void:
 			
 			for _key in Global.arr[key]:
 				dict[scene][_key] = []
-	
-	
 	
 	for _i in Global.num.subsoil.row:
 		for _j in Global.num.subsoil.col:
@@ -190,15 +190,18 @@ func init_cycle() -> void:
 		var cord = star.directions[direction]
 		cycle.append(star)
 		star = cord.get_another_star(star)
+	
+	decors.star = grids.star[Vector2(1, 1)]
+	#decors.star.set_status("occupied")
 
 
 func init_constellation() -> void:
-	axises.index = 9
+	axises.index = 8
 	design_shape()
 
 
 func design_shape() -> void:
-	trefoils.position = center
+	reset()
 	var description = Global.dict.fringe.index[axises.index]
 	var func_name = "design_" + description.shape + "_shape"
 	call(func_name)
@@ -216,9 +219,6 @@ func design_rhomb_shape() -> void:
 	cord = sides.cord[mirror][index]
 	_cords.append(cord)
 	
-	for _cord in _cords:
-		var _index = sides.cord[_cord.side].find(_cord)
-		#print(_cord.index.get_number(), _cord.side, _index)
 	
 	add_constellation(_cords)
 
@@ -297,7 +297,33 @@ func design_trapeze_shape() -> void:
 		for _star in cord.stars:
 			if _star.sides.size() == 2:
 				for _cord in _star.cords:
-					if _cord != cord:
+					if _cord != cord and _cord.side != null:
+						_cords.append(_cord)
+						break
+				
+				break
+	
+	add_constellation(_cords)
+
+
+func design_deadlock_shape() -> void:
+	var description = Global.dict.fringe.index[axises.index]
+	var _cords = []
+	var axis = null
+	
+	for _axis in Global.arr.axis:
+		if description.size[_axis] > 0:
+			axis = _axis
+			break
+	
+	var cord = axises.cord[axis].pick_random()
+	_cords.append(cord)
+	
+	if description.size.x + description.size.y == 2:
+		for _star in cord.stars:
+			if _star.sides.size() == 1:
+				for _cord in _star.cords:
+					if _cord != cord and _cord.side != null:
 						_cords.append(_cord)
 						break
 				
@@ -310,10 +336,26 @@ func add_constellation(cords_: Array) -> void:
 	var input = {}
 	input.proprietor = self
 	input.cords = cords_
+	input.shape = Global.dict.fringe.index[axises.index].shape
 	
 	var constellation = Global.scene.constellation.instantiate()
 	constellations.add_child(constellation)
 	constellation.set_attributes(input)
-	
-	for trefoil in trefoils.get_children():
-		trefoil.paint_based_on_index()
+
+
+func shift_axises_index(shift_: int) -> void:
+	var n = Global.dict.fringe.index.keys().size()
+	axises.index = (axises.index + shift_ + n) % n
+	design_shape()
+
+
+func reset() -> void:
+	if constellations.get_child_count() > 0:
+		var constellation = constellations.get_child(0)
+		constellations.remove_child(constellation)
+		constellation.queue_free()
+		
+		while trefoils.get_child_count() > 0:
+			var trefoil = trefoils.get_child(0)
+			trefoils.remove_child(trefoil)
+			trefoil.queue_free()

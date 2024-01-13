@@ -2,59 +2,77 @@
  {
   "index": 0,
   "x": 0,
-  "y": 2,
-  "shape": "rhomb"
+  "y": 1,
+  "shape": "deadlock"
  },
  {
   "index": 1,
-  "x": 1,
-  "y": 1,
-  "shape": "triangle"
+  "x": 0,
+  "y": 2,
+  "shape": "deadlock"
  },
  {
   "index": 2,
-  "x": 1,
+  "x": 0,
   "y": 2,
-  "shape": "triangle"
- },
- {
-  "index": 3,
-  "x": 2,
-  "y": 0,
   "shape": "rhomb"
  },
  {
+  "index": 3,
+  "x": 1,
+  "y": 0,
+  "shape": "deadlock"
+ },
+ {
   "index": 4,
-  "x": 2,
+  "x": 1,
   "y": 1,
   "shape": "triangle"
  },
  {
   "index": 5,
   "x": 2,
+  "y": 0,
+  "shape": "deadlock"
+ },
+ {
+  "index": 6,
+  "x": 2,
+  "y": 0,
+  "shape": "rhomb"
+ },
+ {
+  "index": 7,
+  "x": 2,
+  "y": 1,
+  "shape": "triangle"
+ },
+ {
+  "index": 8,
+  "x": 2,
   "y": 2,
   "shape": "rectangle"
  },
  {
-  "index": 6,
+  "index": 9,
   "x": 2,
   "y": 3,
   "shape": "trapeze"
  },
  {
-  "index": 7,
+  "index": 10,
   "x": 3,
   "y": 2,
   "shape": "trapeze"
  },
  {
-  "index": 8,
+  "index": 11,
   "x": 3,
   "y": 3,
   "shape": "trapeze"
  },
  {
-  "index": 9,
+  "index": 12,
   "x": 4,
   "y": 4,
   "shape": "rectangle"
