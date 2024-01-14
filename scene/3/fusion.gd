@@ -2,7 +2,8 @@ extends MarginContainer
 
 
 #region vars
-@onready var index = $VBox/Index
+@onready var index = $HBox/Index
+@onready var vocations = $HBox/Vocations
 
 var proprietor = null
 var shape = null
@@ -45,22 +46,31 @@ func init_stars() -> void:
 func init_trefoils() -> void:
 	var _stars = []
 	
-	if stars.size() == 2 or check_stars_on_one_side(stars):
-		var repeats = {}
+	#if stars.size() == 2 or check_stars_on_one_side(stars):
+		#var repeats = {}
+		#
+		#for cord in cords:
+			#for star in cord.stars:
+				#if !repeats.has(star):
+					#repeats[star] = 0
+				#
+				#repeats[star] += 1
+		#
+		#for star in repeats:
+			#if repeats[star] == 2:
+				#stars.erase(star)
+		#
+		#stars.push_front(proprietor.decors.star)
+		#add_trefoil(stars)
+	
+	if shape == "deadlock":
+		stars.push_front(proprietor.decors.star)
 		
 		for cord in cords:
-			for star in cord.stars:
-				if !repeats.has(star):
-					repeats[star] = 0
-				
-				repeats[star] += 1
-		
-		for star in repeats:
-			if repeats[star] == 2:
-				stars.erase(star)
-		
-		stars.push_front(proprietor.decors.star)
-		add_trefoil(stars)
+			_stars = [proprietor.decors.star]
+			_stars.append_array(cord.stars)
+			add_trefoil(_stars)
+			
 	
 	else:
 		for star in proprietor.cycle:
@@ -217,3 +227,32 @@ func turn(shift_: int) -> void:
 	
 	for trefoil in trefoils:
 		trefoil.turn(direction)
+
+
+func flip() -> void:
+	for trefoil in trefoils:
+		trefoil.flip()
+
+
+func init_vocations() -> void:
+	var squares = {}
+	
+	for trefoil in trefoils:
+		if !squares.has(trefoil.vocation):
+			squares[trefoil.vocation] = 0
+		
+		squares[trefoil.vocation] += trefoil.square
+	
+	for vocation in squares:
+		var input = {}
+		input.type = "number"
+		input.subtype = squares[vocation]
+		
+		var icon = Global.scene.icon.instantiate()
+		vocations.add_child(icon)
+		icon.set_attributes(input)
+		
+		var style = StyleBoxFlat.new()
+		icon.bg.set("theme_override_styles/panel", style)
+		style.bg_color = Global.color.vocation[vocation]
+		icon.bg.visible = true

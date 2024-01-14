@@ -17,3 +17,13 @@ func init_basic_setting() -> void:
 	var input = {}
 	input.horizon = self
 	sky.set_attributes(input)
+
+
+func add_constellation(trefoils_: Array) -> void:
+	var input = {}
+	input.horizon = self
+	input.trefoils = trefoils_
+	
+	var constellation = Global.scene.constellation.instantiate()
+	constellations.add_child(constellation)
+	constellation.set_attributes(input)

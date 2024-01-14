@@ -60,6 +60,9 @@ func roll_vocation() -> void:
 	for trefoil in fusion.trefoils:
 		cruxs.erase(trefoil.crux)
 	
+	if cruxs.is_empty():
+		cruxs.append_array(Global.dict.vocation.crux.keys())
+	
 	crux = cruxs.pick_random()
 	vocation = Global.get_random_key(Global.dict.vocation.crux[crux])
 	calculate_square()
@@ -130,3 +133,15 @@ func turn(direction_: String) -> void:
 	
 	stars = turned_stars
 	set_vertexs()
+
+
+func flip() -> void:
+	var fliped_stars = []
+	
+	for star in stars:
+		var _star = fusion.proprietor.flips.star[star]
+		fliped_stars.append(_star)
+	
+	stars = fliped_stars
+	set_vertexs()
+

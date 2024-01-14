@@ -67,8 +67,8 @@ func set_status(status_: String) -> void:
 		status = status_
 		
 		paint_to_match()
-
 #endregion
+
 
 func paint_to_match() -> void:
 	color = Global.color.star[status]

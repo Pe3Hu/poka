@@ -1,25 +1,26 @@
 extends Polygon2D
 
 
+#region vars
 @onready var index = $Index
 
 var proprietor = null
 var core = null
 var stars = []
 var blocks = []
-var neighbors = {}
+var neighbors = []
 var grid = Vector2()
-var kind = null
 var status = null
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	proprietor = input_.proprietor
 	core = input_.core
 	
 	init_basic_setting()
 
-#region init
 
 func init_basic_setting() -> void:
 	for direction in Global.dict.neighbor.diagonal:
@@ -30,16 +31,20 @@ func init_basic_setting() -> void:
 	grid = core.grid - Vector2.ONE
 	grid /= 2
 	
-	for direction in Global.dict.neighbor.zero:
-		var _grid = grid + direction
+	#for direction in Global.dict.neighbor.zero:
+		#var _grid = grid + direction
 		#if proprietor.grids.block.has(_grid):
-		var block = proprietor.grids.block[_grid]
+		#var block = proprietor.grids.block[_grid]
+	
+	for block in core.blocks:
 		blocks.append(block)
+		block.socket = self
 	
 	proprietor.grids.socket[grid] = self
 	
 	init_indexs()
 	set_vertexs()
+	set_status("unavailable")
 
 
 func init_indexs() -> void:
@@ -60,25 +65,16 @@ func set_vertexs() -> void:
 	
 	set_polygon(vertexs)
 
-#endregion
 
 func set_status(status_: String) -> void:
 	status = status_
 	
 	paint_to_match()
-
-
-func set_kind(kind_: String) -> void:
-	kind = kind_
-	
-	paint_to_match()
+#endregion
 
 
 func paint_to_match() -> void:
-	if kind == null:
-		color = Global.color.socket[status]
-	else:
-		color = Global.color.socket[kind]
+	color = Global.color.socket[status]
 
 
 func paint_based_on_index() -> void:

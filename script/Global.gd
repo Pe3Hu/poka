@@ -171,17 +171,15 @@ func init_fringe() -> void:
 	
 	var path = "res://asset/json/poka_fringe.json"
 	var array = load_data(path)
-	var exceptions = ["index", "shape"]
+	var exceptions = ["index"]
 	
 	for fringe in array:
 		fringe.index = int(fringe.index)
 		var data = {}
-		data.size = Vector2()
-		data.shape = fringe.shape
 		
 		for key in fringe:
 			if !exceptions.has(key):
-				data.size[key] = fringe[key]
+				data[key] = fringe[key]
 		
 		dict.fringe.index[fringe.index] = data
 		
@@ -285,33 +283,6 @@ func init_color():
 	color.card.selected = Color.from_hsv(160 / h, 0.6, 0.7)
 	color.card.unselected = Color.from_hsv(0 / h, 0.4, 0.9)
 	
-	color.frontier = {}
-	color.frontier.entry = Color.from_hsv(60 / h, 0.6, 0.7)
-	color.frontier.exit = Color.from_hsv(30 / h, 0.6, 0.7)
-	color.frontier.underside = Color.from_hsv(90 / h, 0.6, 0.7)
-	#color.location.aisle = Color.from_hsv(60 / h, 0.6, 0.7)
-	
-	color.route = {}
-	color.route.active = Color.from_hsv(330 / h, 0.6, 0.7)
-	color.route.passive = Color.from_hsv(30 / h, 0.6, 0.7)
-	
-	color.traveler = {}
-	color.traveler.guardian = Color.from_hsv(0 / h, 0.6, 0.7)
-	color.traveler.sage = Color.from_hsv(210 / h, 0.6, 0.7)
-	
-	color.difficulty = Color.from_hsv(150 / h, 0.6, 0.7)
-	
-	color.scenery = {}
-	color.scenery["forest of life"] = Color.from_hsv(120 / h, 0.6, 0.7)
-	color.scenery["field of death"] = Color.from_hsv(270 / h, 0.6, 0.7)
-	color.scenery["sea of souls"] = Color.from_hsv(210 / h, 0.6, 0.7)
-	
-	color.tower = {}
-	color.tower["life"] = Color.from_hsv(0 / h, 0.6, 0.7)
-	color.tower["death"] = Color.from_hsv(120 / h, 0.6, 0.7)
-	color.tower["souls"] = Color.from_hsv(60 / h, 0.6, 0.7)
-	color.tower["harmony"] = Color.from_hsv(270 / h, 0.6, 0.7)
-	
 	color.cord = {}
 	color.cord.decor = Color.from_hsv(210 / h, 0.9, 0.7)
 	color.cord.cover = Color.from_hsv(120 / h, 0.9, 0.7)
@@ -331,22 +302,11 @@ func init_color():
 	color.star.cold = Color.from_hsv(150 / h, 0.9, 0.7)
 	color.star.heat = Color.from_hsv(0 / h, 0.9, 0.7)
 	
-	color.indicator = {}
-	color.indicator.health = {}
-	color.indicator.health.fill = Color.from_hsv(0, 0.9, 0.7)
-	color.indicator.health.background = Color.from_hsv(0, 0.5, 0.9)
-	color.indicator.energy = {}
-	color.indicator.energy.fill = Color.from_hsv(60 / h, 0.9, 0.7)
-	color.indicator.energy.background = Color.from_hsv(60 / h, 0.5, 0.9)
-	
-	color.role = {}
-	color.role.damager = Color.from_hsv(270 / h, 0.9, 0.9)
-	color.role.charger = Color.from_hsv(30 / h, 0.9, 0.9)
-	color.role.repairer = Color.from_hsv(120 / h, 0.9, 0.9)
-	
-	color.flow = {}
-	color.flow.fringe = Color.from_hsv(300 / h, 0.9, 0.9)
-	color.flow.supplier = Color.from_hsv(90 / h, 0.9, 0.9)
+	color.socket = {}
+	color.socket.unavailable = Color.from_hsv(0 / h, 0.0, 0.3)
+	color.socket.available = Color.from_hsv(0 / h, 0.0, 0.9)
+	color.socket.incomplete = Color.from_hsv(0 / h, 0.0, 0.6)
+	color.socket.completed = Color.from_hsv(0 / h, 0.0, 0.1)
 
 
 func save(path_: String, data_: String):

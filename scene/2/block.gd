@@ -10,10 +10,9 @@ var stars = []
 var cords = {}
 var neighbors = {}
 var grid = Vector2()
+var socket = null
 var kind = null
 var status = null
-var ring = null
-var organ = null
 #endregion
 
 
@@ -114,13 +113,7 @@ func switch_indexs() -> void:
 	indexOrgan.visible = !indexOrgan.visible
 
 
-func set_organ(organ_: MarginContainer) -> void:
-	organ = organ_
-	indexOrgan.visible = true
-	indexOrgan.set_number(organ.index.get_number())
-
-
 func paint_based_on_index() -> void:
 	var hue = indexBlock.get_number() * 1.0 / Global.num.index.block
 	color = Color.from_hsv(hue, 0.6, 0.7)
-	
+

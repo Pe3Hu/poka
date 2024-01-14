@@ -131,9 +131,14 @@ func init_blocks_neighbors() -> void:
 #endregion
 
 
+#region init socket scenes
 func init_sockets() -> void:
 	grids.socket = {}
 	sockets.position = center
+	slots.unavailable = []
+	slots.available = []
+	slots.incomplete = []
+	slots.completed = []
 	
 	for _i in range(1, Global.num.sky.row, 2):
 		for _j in range(1, Global.num.sky.col, 2):
@@ -144,51 +149,50 @@ func init_sockets() -> void:
 			var socket = Global.scene.socket.instantiate()
 			sockets.add_child(socket)
 			socket.set_attributes(input)
+			slots.unavailable.append(socket)
 	
-	#for socket in sockets.get_children():
-	#	socket.paint_based_on_index()
-	
-	slots.option = []
-	slots.incomplete = []
-	slots.completed = []
+	init_sockets_neighbors()
 	var grid = Vector2.ONE * Global.num.socket.half 
 	var socket = grids.socket[grid]
-	slots.option.append(socket)
+	update_slots(socket)
 
 
-func update_slots() -> void:
-	if slots.option.is_empty():
-		var grid = Vector2(1, 1)
-		var block = grids.block[grid]
-		slots.option.append(block)
-
-
-func fill_block_options(blocks_: Array) -> Dictionary:
-	var options = {}
-	var neighbors = []
-	var weight = rings.block.keys().back() + 1
-	
-	if !blocks_.is_empty():
-		for block in blocks_:
+func init_sockets_neighbors() -> void:
+	for socket in sockets.get_children():
+		for block in socket.blocks:
 			for neighbor in block.neighbors:
-				if neighbor.status == "freely" and !neighbors.has(neighbor) and !blocks_.has(neighbor):
-					neighbors.append(neighbor)
+				if neighbor.socket != socket and !socket.neighbors.has(neighbor.socket):
+					socket.neighbors.append(neighbor.socket)
+					neighbor.socket.neighbors.append(socket)
+
+
+func update_slots(socket_: Polygon2D) -> void:
+	if slots.available.is_empty():
+		slots.unavailable.erase(socket_)
+		slots.available.append(socket_)
+		socket_.set_status("available")
 	else:
-		#neighbors.append_array(blocks.get_children())
-		
-		for ring in rings.block:
-			for block in rings.block[ring]:
-				if block.status == "freely":
-					neighbors.append(block)
+		if slots.available.has(socket_):
+			socket_.set_status("incomplete")
+			slots.available.erase(socket_)
+			slots.incomplete.append(socket_)
 			
-			if !neighbors.is_empty():
-				break
+			for neighbor in socket_.neighbors:
+				if slots.unavailable.has(neighbor):
+					slots.unavailable.erase(neighbor)
+					slots.available.append(neighbor)
+					neighbor.set_status("available")
+
+
+func trefoil_transfer(trefoil_: Polygon2D, socket_: Polygon2D) -> void:
+	trefoils.add_child(trefoil_)
 	
-	for neighbor in neighbors:
-		options[neighbor] = weight - neighbor.ring
-	#for ring in rings.block:
-		#for block in rings.block[ring]:
-			#if neighbors.has(block):
-				#options.append(block)
+	for _i in trefoil_.stars.size():
+		var star = trefoil_.stars.pop_front()
+		var grid = socket_.core.grid + star.grid - Vector2.ONE
+		star = grids.star[grid]
+		trefoil_.stars.append(star)
 	
-	return options
+	trefoil_.set_vertexs()
+
+#endregion

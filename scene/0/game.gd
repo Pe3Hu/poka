@@ -17,7 +17,7 @@ func _input(event) -> void:
 		match event.keycode:
 			KEY_SPACE:
 				if event.is_pressed() && !event.is_echo():
-					pass
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.take_to_sky()
 			KEY_A:
 				if event.is_pressed() && !event.is_echo():
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.shift_axises_index(-1)
@@ -26,10 +26,13 @@ func _input(event) -> void:
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.shift_axises_index(1)
 			KEY_Q:
 				if event.is_pressed() && !event.is_echo():
-					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_constellation(-1)
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_fusion(-1)
 			KEY_E:
 				if event.is_pressed() && !event.is_echo():
-					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_constellation(1)
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.turn_fusion(1)
+			KEY_F:
+				if event.is_pressed() && !event.is_echo():
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.flip_fusion()
 
 
 

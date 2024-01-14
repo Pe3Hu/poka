@@ -26,10 +26,14 @@ script = ExtResource("1_df15b")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7paps")
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="HBox" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Index" parent="VBox" instance=ExtResource("2_5u0j5")]
+[node name="Index" parent="HBox" instance=ExtResource("2_5u0j5")]
 layout_mode = 2
+
+[node name="Vocations" type="HBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 0

@@ -1,17 +1,25 @@
 extends MarginContainer
 
 
+#region vars
+@onready var bg = $BG
 @onready var number = $Number
 @onready var tr = $TextureRect
 
 var type = null
 var subtype = null
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	type = input_.type
 	subtype = input_.subtype
 	
+	init_basic_setting()
+
+
+func init_basic_setting() -> void:
 	custom_minimum_size = Vector2(Global.vec.size.letter)
 	var path = "res://asset/png/"
 	var exceptions = ["number"]
@@ -29,8 +37,10 @@ func set_attributes(input_: Dictionary) -> void:
 			set_number(subtype)
 		"blank":
 			custom_minimum_size = Vector2(Global.vec.size.number)
+#endregion
 
 
+#region number processing 
 func get_number():
 	return subtype
 
@@ -69,4 +79,4 @@ func set_number(value_) -> void:
 		TYPE_FLOAT:
 			value = snapped(value, 0.01)
 			number.text = str(value)
-
+#endregion

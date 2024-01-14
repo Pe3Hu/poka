@@ -17,11 +17,14 @@ var fringe = {}
 var axises = {}
 var sides = {}
 var cycle = []
+var chain = []
 var decors = {}
 var turns = {}
+var flips = {}
 #endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	soil = input_.soil
 	
@@ -35,14 +38,13 @@ func init_basic_setting() -> void:
 	
 	init_stars()
 	init_cords()
-	init_blocks()
 	init_cycle()
 	init_turns()
+	init_flips()
 	trefoils.position = center
 	init_fusion()
 
 
-#region init star and cord scenes
 func init_stars() -> void:
 	var corners = {}
 	corners.x = [0, Global.num.subsoil.col - 1]
@@ -128,55 +130,6 @@ func add_cord(first_: Polygon2D, second_: Polygon2D, direction_: Vector2) -> voi
 #endregion
 
 
-#region init block scenes
-func init_blocks() -> void:
-	grids.block = {}
-	blocks.position = center
-	
-	for star in stars.get_children():
-		var _cords = []
-		var grid = Vector2(star.grid)
-		var _star = grids.star[grid]
-		
-		for direction in Global.dict.neighbor.linear2:
-			if _star.directions.has(direction):
-				var cord = _star.directions[direction]
-				_cords.append(cord)
-				grid += direction
-				_star = grids.star[grid]
-				#_star = cord.get_another_star(_star)
-		
-		if _cords.size() == Global.num.star.quartet:
-			add_block(_cords)
-	
-	init_blocks_neighbors()
-	
-	#for block in blocks.get_children():
-	#	block.paint_based_on_index()
-
-
-func add_block(_cords: Array) -> void:
-	var input = {}
-	input.proprietor = self
-	input.cords = _cords
-	
-	var block = Global.scene.block.instantiate()
-	blocks.add_child(block)
-	block.set_attributes(input)
-
-
-func init_blocks_neighbors() -> void:
-	var n = 2
-	
-	for cord in cords.get_children():
-		if cord.blocks.size() == n:
-			for _i in n:
-				var block = cord.blocks[_i]
-				var neighbor = cord.blocks[(_i + 1) % n]
-				block.neighbors[neighbor] = cord
-#endregion
-
-
 func init_cycle() -> void:
 	var grid = Vector2()
 	var star = grids.star[grid]
@@ -193,6 +146,7 @@ func init_cycle() -> void:
 			direction = directions.front()
 		
 		var cord = star.directions[direction]
+		chain.append(cord)
 		cycle.append(star)
 		star = cord.get_another_star(star)
 	
@@ -217,11 +171,29 @@ func init_turns() -> void:
 		turns.star[turn][decors.star] = decors.star
 
 
+func init_flips() -> void:
+	flips.star = {}
+	var shift = 6
+	var indexs = []
+	var index = stars.get_children().find(decors.star)
+	
+	for _i in stars.get_child_count():
+		var star = stars.get_child(_i)
+		var gap = index - _i
+		var _j = index - gap + shift
+		
+		if abs(gap) > 1:
+			if sign(gap) < 0:
+				_j = _i + (index - shift * 1.5 - 1)
+		else:
+			_j = _i
+		
+		flips.star[star] = stars.get_child(_j)
+
 func init_fusion() -> void:
-	axises.index = 11
+	axises.index = 4
 	design_shape()
-	var block = sky.slots.option.front()
-	take_to_sky(block)
+	#take_to_sky()
 
 
 #region of design shape
@@ -269,7 +241,7 @@ func design_triangle_shape() -> void:
 		if _cord != cord:
 			_cords.append(_cord)
 	
-	if description.size.x > 1 or description.size.y > 1:
+	if description.primary > 1 or description.secondary > 1:
 		for _cord in _stars["edge"].cords:
 			if _cord != cord:
 				_cords.append(_cord)
@@ -281,7 +253,7 @@ func design_rectangle_shape() -> void:
 	var description = Global.dict.fringe.index[axises.index]
 	var _cords = []
 	
-	if description.size.x == 2:
+	if description.primary == 2:
 		var axis = Global.arr.axis.pick_random()
 		var cord = axises.cord[axis].pick_random()
 		_cords.append(cord)
@@ -318,7 +290,7 @@ func design_trapeze_shape() -> void:
 	cord = options.pick_random()
 	_cords.append(cord)
 	
-	if description.size.x == description.size.y:
+	if description.primary == description.secondary:
 		for _star in cord.stars:
 			if _star.sides.size() == 2:
 				for _cord in _star.cords:
@@ -334,17 +306,12 @@ func design_trapeze_shape() -> void:
 func design_deadlock_shape() -> void:
 	var description = Global.dict.fringe.index[axises.index]
 	var _cords = []
-	var axis = null
-	
-	for _axis in Global.arr.axis:
-		if description.size[_axis] > 0:
-			axis = _axis
-			break
-	
+	var axis = Global.arr.axis.pick_random()
 	var cord = axises.cord[axis].pick_random()
 	_cords.append(cord)
 	
-	if description.size.x + description.size.y == 2:
+	if description.primary == 0 and description.secondary == 2:
+		
 		for _star in cord.stars:
 			if _star.sides.size() == 1:
 				for _cord in _star.cords:
@@ -353,9 +320,23 @@ func design_deadlock_shape() -> void:
 						break
 				
 				break
+	else:
+		var n = description.primary + description.secondary - 1
+		
+		var options = []
+		var index = chain.find(cord)
+		
+		for _i in chain.size():
+			if _i % 2 == index % 2 and index != _i:
+				options.append(chain[_i])
+		
+		
+		for _i in n:
+			var _cord = options.pick_random()
+			_cords.append(_cord)
+			options.erase(_cord)
 	
 	add_fusion(_cords)
-
 #endregion
 
 
@@ -371,21 +352,28 @@ func add_fusion(cords_: Array) -> void:
 
 
 func shift_axises_index(shift_: int) -> void:
+	Global.num.index.fusion -= 1
+	get_fusion()
 	var n = Global.dict.fringe.index.keys().size()
 	axises.index = (axises.index + shift_ + n) % n
 	design_shape()
 
 
-func reset() -> void:
+func get_fusion() -> Variant:
 	if fusions.get_child_count() > 0:
 		var fusion = fusions.get_child(0)
 		fusions.remove_child(fusion)
-		fusion.queue_free()
-		
-		while trefoils.get_child_count() > 0:
-			var trefoil = trefoils.get_child(0)
-			trefoils.remove_child(trefoil)
-			trefoil.queue_free()
+		return fusion
+	
+	return null
+
+
+func reset() -> void:
+	while trefoils.get_child_count() > 0:
+		var trefoil = trefoils.get_child(0)
+		trefoils.remove_child(trefoil)
+		trefoil.queue_free()
+		Global.num.index.trefoil -= 1
 
 
 func turn_fusion(shift_: int) -> void:
@@ -393,7 +381,23 @@ func turn_fusion(shift_: int) -> void:
 	fusion.turn(shift_)
 
 
-func take_to_sky(block_: Polygon2D) -> void:
+func flip_fusion() -> void:
 	var fusion = fusions.get_child(0)
-	fusions.remove_child(fusion)
+	fusion.flip()
+
+
+func take_to_sky() -> void:
+	var socket = sky.slots.available.front()
+	var fusion = get_fusion()
 	soil.fusions.add_child(fusion)
+	fusion.init_vocations()
+	
+	while trefoils.get_child_count() > 0:
+		var trefoil = trefoils.get_child(0)
+		trefoils.remove_child(trefoil)
+		sky.trefoil_transfer(trefoil, socket)
+	
+	axises.index = Global.dict.fringe.index.keys().pick_random()
+	design_shape()
+	sky.update_slots(socket)
+	#reset()
