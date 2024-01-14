@@ -11,6 +11,8 @@ var cords = []
 var stars = []
 var trefoils = []
 var gaps = []
+var flips = 0
+var turns = 0
 #endregion
 
 #region init
@@ -224,12 +226,15 @@ func revocation_from_neighbors(trefoil_: Polygon2D) -> void:
 func turn(shift_: int) -> void:
 	var index = (shift_ + 1 ) / 2
 	var direction = Global.arr.turn[index]
+	turns = (turns + shift_ + Global.arr.turn.size()) % Global.arr.turn.size()
 	
 	for trefoil in trefoils:
 		trefoil.turn(direction)
 
 
 func flip() -> void:
+	flips = (flips + 1) % 2
+	
 	for trefoil in trefoils:
 		trefoil.flip()
 

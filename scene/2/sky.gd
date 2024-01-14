@@ -194,5 +194,4 @@ func trefoil_transfer(trefoil_: Polygon2D, socket_: Polygon2D) -> void:
 		trefoil_.stars.append(star)
 	
 	trefoil_.set_vertexs()
-
 #endregion

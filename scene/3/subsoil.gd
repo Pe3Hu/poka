@@ -130,6 +130,7 @@ func add_cord(first_: Polygon2D, second_: Polygon2D, direction_: Vector2) -> voi
 #endregion
 
 
+#region rotation connections 
 func init_cycle() -> void:
 	var grid = Vector2()
 	var star = grids.star[grid]
@@ -189,11 +190,13 @@ func init_flips() -> void:
 			_j = _i
 		
 		flips.star[star] = stars.get_child(_j)
+#endregion
+
 
 func init_fusion() -> void:
-	axises.index = 4
+	axises.index = 10
 	design_shape()
-	#take_to_sky()
+	take_to_sky()
 
 
 #region of design shape
@@ -397,7 +400,11 @@ func take_to_sky() -> void:
 		trefoils.remove_child(trefoil)
 		sky.trefoil_transfer(trefoil, socket)
 	
-	axises.index = Global.dict.fringe.index.keys().pick_random()
-	design_shape()
 	sky.update_slots(socket)
+	roll_fringe_index()
+	design_shape()
 	#reset()
+
+
+func roll_fringe_index() -> void:
+	axises.index = Global.get_random_key(Global.dict.fringe.weight) 

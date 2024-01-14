@@ -70,6 +70,10 @@ func init_num() -> void:
 	
 	num.trefoil = {}
 	num.trefoil.square = num.cord.l * num.cord.l * 0.5
+	
+	num.mirage = {}
+	num.mirage.flips = 2
+	num.mirage.turns = 4
 
 
 func init_dict() -> void:
@@ -168,6 +172,7 @@ func init_fringe() -> void:
 	dict.fringe = {}
 	dict.fringe.index = {}
 	dict.fringe.shape = {}
+	dict.fringe.weight = {}
 	
 	var path = "res://asset/json/poka_fringe.json"
 	var array = load_data(path)
@@ -182,6 +187,7 @@ func init_fringe() -> void:
 				data[key] = fringe[key]
 		
 		dict.fringe.index[fringe.index] = data
+		dict.fringe.weight[fringe.index] = fringe.index
 		
 		if !dict.fringe.shape.has(fringe.shape):
 			dict.fringe.shape[fringe.shape] = []
@@ -233,6 +239,8 @@ func init_scene() -> void:
 	
 	scene.fusion = load("res://scene/3/fusion.tscn")
 	scene.trefoil = load("res://scene/3/trefoil.tscn")
+	
+	scene.mirage = load("res://scene/4/mirage.tscn")
 
 
 func init_vec():
