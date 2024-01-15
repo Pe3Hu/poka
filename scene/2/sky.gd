@@ -167,21 +167,23 @@ func init_sockets_neighbors() -> void:
 
 
 func update_slots(socket_: Polygon2D) -> void:
-	if slots.available.is_empty():
-		slots.unavailable.erase(socket_)
-		slots.available.append(socket_)
-		socket_.set_status("available")
-	else:
-		if slots.available.has(socket_):
-			socket_.set_status("incomplete")
-			slots.available.erase(socket_)
-			slots.incomplete.append(socket_)
-			
-			for neighbor in socket_.neighbors:
-				if slots.unavailable.has(neighbor):
-					slots.unavailable.erase(neighbor)
-					slots.available.append(neighbor)
-					neighbor.set_status("available")
+	advance_socket(socket_)
+	
+	for neighbor in socket_.neighbors:
+		if slots.unavailable.has(neighbor):
+			advance_socket(neighbor)
+
+
+func advance_socket(socket_: Polygon2D) -> void:
+	var status = String(socket_.status)
+	slots[status].erase(socket_)
+	
+	for cord in socket_.cords:
+		if cord.status == socket_.status:
+			cord.advance_status()
+	
+	socket_.advance_status()
+	slots[socket_.status].append(socket_)
 
 
 func trefoil_transfer(trefoil_: Polygon2D, socket_: Polygon2D) -> void:
@@ -194,12 +196,15 @@ func trefoil_transfer(trefoil_: Polygon2D, socket_: Polygon2D) -> void:
 		trefoil_.stars.append(star)
 	
 	trefoil_.set_vertexs()
+	var _cords = get_cords_based_on_stars(trefoil_.stars)
+	
+	for cord in _cords:
+		cord.add_trefoil(trefoil_)
 #endregion
 
 
 func get_cords_based_on_stars(stars_: Array) -> Array:
-	var cords = []
-	#print("___")
+	var _cords = []
 	
 	for _i in stars_.size():
 		var star_a = stars_[_i]
@@ -215,11 +220,9 @@ func get_cords_based_on_stars(stars_: Array) -> Array:
 				
 				for _k in abs(n):
 					var cord = star_a.directions[direction]
-					cords.append(cord)
+					_cords.append(cord)
 					star_a = cord.get_another_star(star_a)
-					#print(cord.index.get_number())
-				
 				break
 	
-	cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
-	return cords
+	#_cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
+	return _cords

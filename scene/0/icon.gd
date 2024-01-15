@@ -4,7 +4,7 @@ extends MarginContainer
 #region vars
 @onready var bg = $BG
 @onready var number = $Number
-@onready var tr = $TextureRect
+@onready var textureRect = $TextureRect
 
 var type = null
 var subtype = null
@@ -27,12 +27,12 @@ func init_basic_setting() -> void:
 	if !exceptions.has(type):
 		custom_minimum_size = Vector2(Global.vec.size.icon)
 		path += type + "/" + subtype + ".png"
-		tr.texture = load(path)
+		textureRect.texture = load(path)
 	
 	match type:
 		"number":
 			custom_minimum_size = Vector2(Global.vec.size.number)
-			tr.visible = false
+			textureRect.visible = false
 			number.visible = true
 			set_number(subtype)
 		"blank":

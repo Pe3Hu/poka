@@ -9,6 +9,7 @@ var core = null
 var stars = []
 var blocks = []
 var neighbors = []
+var cords = []
 var grid = Vector2()
 var status = null
 #endregion
@@ -31,11 +32,6 @@ func init_basic_setting() -> void:
 	grid = core.grid - Vector2.ONE
 	grid /= 2
 	
-	#for direction in Global.dict.neighbor.zero:
-		#var _grid = grid + direction
-		#if proprietor.grids.block.has(_grid):
-		#var block = proprietor.grids.block[_grid]
-	
 	for block in core.blocks:
 		blocks.append(block)
 		block.socket = self
@@ -44,7 +40,8 @@ func init_basic_setting() -> void:
 	
 	init_indexs()
 	set_vertexs()
-	set_status("unavailable")
+	advance_status()
+	cords = core.get_cords_around_socket_perimeter()
 
 
 func init_indexs() -> void:
@@ -66,9 +63,8 @@ func set_vertexs() -> void:
 	set_polygon(vertexs)
 
 
-func set_status(status_: String) -> void:
-	status = status_
-	
+func advance_status() -> void:
+	status = Global.dict.chain.status[status]
 	paint_to_match()
 #endregion
 

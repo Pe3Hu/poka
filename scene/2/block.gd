@@ -43,7 +43,6 @@ func init_basic_setting(input_: Dictionary) -> void:
 	
 	init_indexs()
 	set_vertexs()
-	set_status("freely")
 
 
 func init_indexs() -> void:
@@ -68,49 +67,7 @@ func set_vertexs() -> void:
 	set_polygon(vertexs)
 	
 	indexOrgan.position = indexBlock.position
-
-
-func set_status(status_: String) -> void:
-	status = status_
-	
-	paint_to_match()
 #endregion
-
-
-func set_kind(kind_: String) -> void:
-	kind = kind_
-	
-	paint_to_match()
-
-
-func paint_to_match() -> void:
-	if kind == null:
-		color = Global.color.block[status]
-	else:
-		color = Global.color.block[kind]
-
-
-func update_kind() -> void:
-	status = "occupied"
-	var kinds = {}
-	
-	for cord in cords:
-		if !kinds.has(cord.kind):
-			kinds[cord.kind] = 1
-		else:
-			kinds[cord.kind] += 1
-	
-	var _kind = "cover"
-	
-	if kinds.decor >= 2:
-		_kind = "decor"
-	
-	set_kind(_kind)
-
-
-func switch_indexs() -> void:
-	indexBlock.visible = !indexBlock.visible
-	indexOrgan.visible = !indexOrgan.visible
 
 
 func paint_based_on_index() -> void:

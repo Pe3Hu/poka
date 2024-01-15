@@ -72,3 +72,15 @@ func set_status(status_: String) -> void:
 
 func paint_to_match() -> void:
 	color = Global.color.star[status]
+
+
+func get_cords_around_socket_perimeter() -> Array:
+	var stars = []
+	
+	for direction in Global.dict.neighbor.diagonal:
+		var _grid = grid + direction
+		var star = proprietor.grids.star[_grid]
+		stars.append(star)
+	
+	var _cords = proprietor.get_cords_based_on_stars(stars)
+	return _cords

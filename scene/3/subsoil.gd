@@ -13,13 +13,13 @@ var soil = null
 var sky = null
 var oasis = null
 var center = null
+var core = null
 var grids = {}
 var fringe = {}
 var axises = {}
 var sides = {}
 var cycle = []
 var chain = []
-var decors = {}
 var turns = {}
 var flips = {}
 #endregion
@@ -153,8 +153,8 @@ func init_cycle() -> void:
 		cycle.append(star)
 		star = cord.get_another_star(star)
 	
-	decors.star = grids.star[Vector2(1, 1)]
-	#decors.star.set_status("occupied")
+	core = grids.star[Vector2(1, 1)]
+	#core.set_status("occupied")
 
 
 func init_turns() -> void:
@@ -171,14 +171,13 @@ func init_turns() -> void:
 			turns.star[turn][star] = cycle[_j]
 	
 	for turn in Global.arr.turn:
-		turns.star[turn][decors.star] = decors.star
+		turns.star[turn][core] = core
 
 
 func init_flips() -> void:
 	flips.star = {}
 	var shift = 6
-	var indexs = []
-	var index = stars.get_children().find(decors.star)
+	var index = stars.get_children().find(core)
 	
 	for _i in stars.get_child_count():
 		var star = stars.get_child(_i)
@@ -234,14 +233,13 @@ func design_triangle_shape() -> void:
 	_cords.append(cord)
 	
 	var _stars = {}
-	var star = null
 	
-	for _star in cord.stars:
-		match _star.sides.size():
+	for star in cord.stars:
+		match star.sides.size():
 			1:
-				_stars["edge"] = _star
+				_stars["edge"] = star
 			2:
-				_stars["corner"] = _star
+				_stars["corner"] = star
 	
 	for _cord in _stars["corner"].cords:
 		if _cord != cord:
@@ -411,3 +409,28 @@ func take_to_sky() -> void:
 
 func roll_fringe_index() -> void:
 	axises.index = 9#Global.get_random_key(Global.dict.fringe.weight) 
+
+
+func get_cords_based_on_stars(stars_: Array) -> Array:
+	var _cords = []
+	
+	for _i in stars_.size():
+		var star_a = stars_[_i]
+		var _j = (_i + 1) % stars_.size()
+		var star_b = stars_[_j]
+		
+		for axis in Global.arr.axis:
+			if star_a.grid[axis] == star_b.grid[axis]:
+				var direction = Vector2()
+				var mirror = Global.dict.axis.mirror[axis]
+				var n = star_b.grid[mirror] - star_a.grid[mirror]
+				direction[mirror] = sign(n)
+				
+				for _k in abs(n):
+					var cord = star_a.directions[direction]
+					_cords.append(cord)
+					star_a = cord.get_another_star(star_a)
+				break
+	
+	#_cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
+	return _cords

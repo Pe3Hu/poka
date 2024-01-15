@@ -82,6 +82,13 @@ func init_dict() -> void:
 	init_side()
 	init_fringe()
 	init_vocation()
+	
+	dict.chain = {}
+	dict.chain.status = {}
+	dict.chain.status[null] = "unavailable"
+	dict.chain.status["unavailable"] = "available"
+	dict.chain.status["available"] = "incomplete"
+	dict.chain.status["incomplete"] = "completed"
 
 
 func init_side() -> void:
@@ -297,15 +304,10 @@ func init_color():
 	color.card.unselected = Color.from_hsv(0 / h, 0.4, 0.9)
 	
 	color.cord = {}
-	color.cord.decor = Color.from_hsv(210 / h, 0.9, 0.7)
-	color.cord.cover = Color.from_hsv(120 / h, 0.9, 0.7)
-	color.cord.heat = Color.from_hsv(0 / h, 0.9, 0.7)
-	
-	color.block = {}
-	color.block.decor = Color.from_hsv(120 / h, 0.8, 0.4)
-	color.block.cover = Color.from_hsv(210 / h, 0.8, 0.4)
-	color.block.insulation = Color.from_hsv(270 / h, 0.8, 0.4)
-	color.block.freely = Color.from_hsv(0 / h, 0.0, 0.9)
+	color.cord.unavailable = Color.from_hsv(30 / h, 0.6, 0.7)
+	color.cord.available = Color.from_hsv(210 / h, 0.9, 0.7)
+	color.cord.incomplete = Color.from_hsv(0 / h,  0.9, 0.7)
+	color.cord.completed = Color.from_hsv(270 / h, 0.9, 0.7)
 	
 	color.star = {}
 	color.star.occupied = Color.from_hsv(60 / h, 0.9, 0.9)

@@ -11,6 +11,7 @@ var oasis = null
 var sky = null
 var fusion = null
 var socket = null
+var cords = {}
 #endregion
 
 #region init
@@ -49,18 +50,7 @@ func init_turns_and_flips(input_: Dictionary) -> void:
 #endregion
 
 
-func compliance_check() -> bool:
-	var flag = true
-	
-	return flag
-
-
-func cord_check() -> bool:
-	
-	
-	return true
-
-
+#region checks
 func repetition_check(mirage_: MarginContainer) -> bool:
 	var flag = stars_repetition_check(mirage_)
 	
@@ -76,8 +66,6 @@ func stars_repetition_check(mirage_: MarginContainer) -> bool:
 	
 	for mirage in mirages:
 		indexs[mirage] = {}
-		#if socket.index.get_number() == 7:
-			#print([mirage.flips.get_number(), mirage.turns.get_number()])
 		
 		for trefoil in mirage.fusion.trefoils:
 			indexs[mirage][trefoil] = []
@@ -99,20 +87,14 @@ func stars_repetition_check(mirage_: MarginContainer) -> bool:
 			indexs[mirage][trefoil].sort_custom(func(a, b): return a < b)
 	
 	
-	#if socket.index.get_number() == 7:
-	#	print(indexs)
-	
 	for _i in range(indexs[self].keys().size() -1, -1, -1):
 		var flag = true
 		
-		for _j in range(indexs[mirage_].keys().size() -1, -1, -1):#indexs[mirage_].keys().size():
+		for _j in range(indexs[mirage_].keys().size() -1, -1, -1):
 			var trefoil_a = indexs[self].keys()[_i]
 			var trefoil_b = indexs[mirage_].keys()[_j]
 			var indexs_a = indexs[self][trefoil_a]
 			var indexs_b = indexs[mirage_][trefoil_b]
-			
-			#if socket.index.get_number() == 7:
-			#	print(indexs_a, indexs_b)
 			
 			for _k in indexs_a.size():
 				if indexs_a[_k] != indexs_b[_k]:
@@ -121,76 +103,89 @@ func stars_repetition_check(mirage_: MarginContainer) -> bool:
 			if flag:
 				indexs[self].erase(trefoil_a)
 				indexs[mirage_].erase(trefoil_b)
-				#if socket.index.get_number() == 7:
-				#	print("@")
 				break
 	
-	#if socket.index.get_number() == 7 and indexs[self].keys().is_empty(): 
-		#print("!")
 	return indexs[self].keys().is_empty()
 
 
 func cords_repetition_check(mirage_: MarginContainer) -> bool:
 	var mirages = [self, mirage_]
-	var stars = {}
-	var cords = {}
 	
 	for mirage in mirages:
-		stars[mirage] = {}
-		cords[mirage] = {}
-		if socket.index.get_number() == 7:
-			print([mirage.flips.get_number(), mirage.turns.get_number()])
+		mirage.fill_cords()
+	
+	for _i in cords.keys().size():
+		var cord = cords.keys()[_i]
 		
-		for trefoil in mirage.fusion.trefoils:
-			stars[mirage][trefoil] = []
+		if !mirage_.cords.has(cord):
+			return false
+		
+		if cords[cord].vocation != mirage_.cords[cord].vocation:
+			return false
+	
+	return true
+
+
+func fill_cords() -> void:
+	if cords.keys().is_empty():
+		var stars = {}
+		
+		for trefoil in fusion.trefoils:
+			stars[trefoil] = []
 			
 			for star in trefoil.stars:
 				var _star = star
 				
-				for _i in mirage.flips.get_number():
+				for _i in flips.get_number():
 					_star = fusion.proprietor.flips.star[_star]
 				
-				for _i in mirage.turns.get_number():
+				for _i in turns.get_number():
 					_star = fusion.proprietor.turns.star["clockwise"][_star]
 				
-				stars[mirage][trefoil].append(_star)
-	
-	for mirage in mirages:
-		for trefoil in mirage.fusion.trefoils:
-			var _cords = sky.get_cords_based_on_stars(stars[mirage][trefoil])
+				stars[trefoil].append(_star)
+		
+		for trefoil in fusion.trefoils:
+			var _cords = sky.get_cords_based_on_stars(stars[trefoil])
 			
 			for cord in _cords:
-				cords[mirage][cord] = trefoil
-			#for _i in stars[mirage][trefoil].size():
-				#var star_a = stars[mirage][trefoil][_i]
-				#var _j = (_i + 1) % stars[mirage][trefoil].size()
-				#var star_b = stars[mirage][trefoil][_j]
-				#
-				#if star_a.neighbors.has(star_b):
-					#var cord = star_a.neighbors[star_b]
-					#cords[mirage][cord] = trefoil
+				if !cords.has(cord):
+					cords[cord] = trefoil
+
+
+func compliance_check() -> bool:
+	var flag = cords_check()
 	
-	if socket.index.get_number() == 7:
-		for key in cords:
-			print("___", key)
+	return flag
+
+
+func cords_check() -> bool:
+	if Global.num.index.fusion == 2:
+		print([socket.index.get_number(), ">>>", flips.get_number(), turns.get_number()])
+	var _cords = {}
+	_cords.socket = socket.core.get_cords_around_socket_perimeter()
+	_cords.fusion = fusion.proprietor.core.get_cords_around_socket_perimeter()
+	
+	for cord in _cords.fusion:
+		if !cords.has(cord):
+			cords[cord] = null
+		else:
+			cords[cord] = cords[cord].vocation
+	
+	for _i in _cords.socket.size():
+		var cord = {}
+		cord.socket = _cords.socket[_i]
+		cord.fusion = _cords.fusion[_i]
+		var vocation = null
+		
+		if cord.socket.status == "incomplete":
+			if !cord.socket.trefoils.is_empty():
+				vocation = cord.socket.trefoils.front().vocation
 			
-			for cord in cords[key]:
-				print(cord.index.get_number())
+			if vocation != cords[cord.fusion]:
+				if Global.num.index.fusion == 2:
+					print(["???", cord.socket.index.get_number(), cord.fusion.index.get_number()])
+				return false
+			
 	
-	for _i in cords[self].keys().size():
-		var cord = cords[self].keys()[_i]
-		
-		if !cords[mirage_].has(cord):
-			if socket.index.get_number() == 7:
-				print(cord.index.get_number(), " is single")
-		
-			return false
-		
-		if cords[self][cord].vocation != cords[mirage_][cord].vocation:
-			if socket.index.get_number() == 7:
-				print(cord.index.get_number(), " diffrent vocation")
-			return false
-	
-	if socket.index.get_number() == 7:
-		print("match")
 	return true
+#endregion

@@ -9,3 +9,11 @@ res://asset/json/poka_fringe.json
 res://script/Global.gd
 res://scene/2/sky.gd
 res://scene/1/vastness.gd
+res://scene/2/star.gd
+res://scene/3/fusion.gd
+res://scene/2/cord.tscn
+res://scene/2/cord.gd
+res://scene/2/socket.gd
+res://scene/2/block.gd
+res://scene/1/god.gd
+res://scene/0/icon.gd

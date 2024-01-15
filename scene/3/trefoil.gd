@@ -154,8 +154,8 @@ func repetition_check_based_on_trefoil(trefoil_: Polygon2D) -> bool:
 		indexs[trefoil] = []
 		
 		for star in trefoil.stars:
-			var index = star.index.get_number()
-			indexs[trefoil].append(index)
+			var _index = star.index.get_number()
+			indexs[trefoil].append(_index)
 		
 		indexs[trefoil].sort_custom(func(a, b): return a < b)
 	
@@ -167,14 +167,13 @@ func repetition_check_based_on_trefoil(trefoil_: Polygon2D) -> bool:
 
 
 func repetition_check_on_rotation(flips_: int, turns_: int) -> bool:
-	var rotated_stars = []
 	var indexs = {}
 	indexs.original = []
 	indexs.rotated = []
 	
 	for star in stars:
-		var index = star.index.get_number()
-		indexs.original.append(index)
+		var _index = star.index.get_number()
+		indexs.original.append(_index)
 		var _star = star
 		
 		for _i in flips_:
@@ -183,8 +182,8 @@ func repetition_check_on_rotation(flips_: int, turns_: int) -> bool:
 		for _i in turns_:
 			_star = fusion.proprietor.turns.star["clockwise"][_star]
 		
-		index = _star.index.get_number()
-		indexs.rotated.append(index)
+		_index = _star._index.get_number()
+		indexs.rotated.append(_index)
 	
 	for key in indexs:
 		indexs[key].sort_custom(func(a, b): return a < b)

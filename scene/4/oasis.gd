@@ -39,7 +39,7 @@ func init_mirages() -> void:
 				mirages.add_child(mirage)
 				mirage.set_attributes(input)
 	
-	init_mirages_recurrence_check()
+	init_mirages_checks()
 
 
 func reset() -> void:
@@ -49,7 +49,7 @@ func reset() -> void:
 		mirage.queue_free()
 
 
-func init_mirages_recurrence_check() -> void:
+func init_mirages_checks() -> void:
 	for _i in mirages.get_child_count():
 		if _i >= mirages.get_child_count():
 			break
@@ -61,6 +61,16 @@ func init_mirages_recurrence_check() -> void:
 			
 			if mirage_a.socket == mirage_b.socket:
 				if mirage_a.repetition_check(mirage_b):
-					mirages.remove_child(mirage_b)
-					mirage_b.queue_free()
+					kick(mirage_b)
+	
+	for _i in range(mirages.get_child_count()-1, -1, -1):
+		var mirage = mirages.get_child(_i)
+		
+		if !mirage.compliance_check():
+			kick(mirage)
 #endregion
+
+
+func kick(mirage_: MarginContainer) -> void:
+	mirages.remove_child(mirage_)
+	mirage_.queue_free()

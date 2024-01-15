@@ -224,8 +224,8 @@ func revocation_from_neighbors(trefoil_: Polygon2D) -> void:
 
 
 func turn(shift_: int) -> void:
-	var index = (shift_ + 1 ) / 2
-	var direction = Global.arr.turn[index]
+	var _index = (shift_ + 1 ) / 2
+	var direction = Global.arr.turn[_index]
 	turns = (turns + shift_ + Global.arr.turn.size()) % Global.arr.turn.size()
 	
 	for trefoil in trefoils:

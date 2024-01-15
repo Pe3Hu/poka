@@ -7,7 +7,7 @@ extends Line2D
 var proprietor = null
 var stars = []
 var blocks = []
-var kind = null
+var trefoils = []
 var status = null
 var side = null
 #endregion
@@ -24,6 +24,7 @@ func set_attributes(input_: Dictionary) -> void:
 func init_basic_setting() -> void:
 	init_index()
 	set_vertexs()
+	advance_status()
 
 
 func init_index() -> void:
@@ -44,6 +45,14 @@ func set_vertexs() -> void:
 	index.position.x -= index.custom_minimum_size.x * 0.5
 	index.position.y -= index.custom_minimum_size.y * 0.5
 
+
+func advance_status() -> void:
+	status = Global.dict.chain.status[status]
+	paint_to_match()
+
+
+func paint_to_match() -> void:
+	default_color = Global.color.cord[status]
 #endregion
 
 
@@ -54,21 +63,6 @@ func get_another_star(star_: Polygon2D) -> Variant:
 				return star
 	
 	return null
-
-
-func set_kind(kind_: String) -> void:
-	kind = kind_
-	status = "cold"
-	
-	paint_to_match()
-
-
-func paint_to_match() -> void:
-	match status:
-		"cold":
-			default_color = Global.color.cord[kind]
-		"heat":
-			default_color = Global.color.cord[status]
 
 
 func update_axis() -> void:
@@ -98,3 +92,6 @@ func update_side() -> void:
 			side = _side
 			proprietor.sides.cord[side].append(self)
 
+
+func add_trefoil(trefoil_: Polygon2D) -> void:
+	trefoils.append(trefoil_)
