@@ -19,10 +19,10 @@ func set_attributes(input_: Dictionary) -> void:
 func init_basic_setting() -> void:
 	sky = vastness.horizon.sky
 	subsoil = vastness.soil.subsoil
-	init_mirages()
 
 
 func init_mirages() -> void:
+	reset()
 	var fusion = subsoil.fusions.get_child(0)
 	
 	for socket in sky.slots.available:
@@ -38,3 +38,29 @@ func init_mirages() -> void:
 				var mirage = Global.scene.mirage.instantiate()
 				mirages.add_child(mirage)
 				mirage.set_attributes(input)
+	
+	init_mirages_recurrence_check()
+
+
+func reset() -> void:
+	while mirages.get_child_count() > 0:
+		var mirage = mirages.get_child(0)
+		mirages.remove_child(mirage)
+		mirage.queue_free()
+
+
+func init_mirages_recurrence_check() -> void:
+	for _i in mirages.get_child_count():
+		if _i >= mirages.get_child_count():
+			break
+		
+		var mirage_a = mirages.get_child(_i)
+		
+		for _j in range(mirages.get_child_count()-1, _i, -1):
+			var mirage_b = mirages.get_child(_j)
+			
+			if mirage_a.socket == mirage_b.socket:
+				if mirage_a.repetition_check(mirage_b):
+					mirages.remove_child(mirage_b)
+					mirage_b.queue_free()
+#endregion

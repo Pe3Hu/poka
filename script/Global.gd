@@ -37,7 +37,7 @@ func init_arr() -> void:
 	arr.organ = ["supplier", "fringe"]
 	arr.axis = ["x", "y"]
 	arr.side = ["up", "right", "down", "left"]
-	arr.turn = ["clockwise", "counterclockwise"]
+	arr.turn = ["counterclockwise", "clockwise"]
 
 
 func init_num() -> void:
@@ -94,6 +94,11 @@ func init_side() -> void:
 	dict.side.mirror["down"] = "up"
 	dict.side.mirror["left"] = "right"
 	dict.side.mirror["right"] = "left"
+	
+	dict.axis = {}
+	dict.axis.mirror = {}
+	dict.axis.mirror["x"] = "y"
+	dict.axis.mirror["y"] = "x"
 
 
 func init_neighbor() -> void:

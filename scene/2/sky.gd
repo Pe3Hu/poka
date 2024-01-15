@@ -195,3 +195,31 @@ func trefoil_transfer(trefoil_: Polygon2D, socket_: Polygon2D) -> void:
 	
 	trefoil_.set_vertexs()
 #endregion
+
+
+func get_cords_based_on_stars(stars_: Array) -> Array:
+	var cords = []
+	#print("___")
+	
+	for _i in stars_.size():
+		var star_a = stars_[_i]
+		var _j = (_i + 1) % stars_.size()
+		var star_b = stars_[_j]
+		
+		for axis in Global.arr.axis:
+			if star_a.grid[axis] == star_b.grid[axis]:
+				var direction = Vector2()
+				var mirror = Global.dict.axis.mirror[axis]
+				var n = star_b.grid[mirror] - star_a.grid[mirror]
+				direction[mirror] = sign(n)
+				
+				for _k in abs(n):
+					var cord = star_a.directions[direction]
+					cords.append(cord)
+					star_a = cord.get_another_star(star_a)
+					#print(cord.index.get_number())
+				
+				break
+	
+	cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
+	return cords

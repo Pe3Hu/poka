@@ -3,72 +3,91 @@
   "index": 0,
   "primary": 0,
   "secondary": 1,
-  "shape": "deadlock"
+  "shape": "deadlock",
+  "weight": 9
  },
  {
   "index": 1,
   "primary": 0,
   "secondary": 2,
-  "shape": "deadlock"
+  "shape": "deadlock",
+  "weight": 7
  },
  {
   "index": 2,
   "primary": 0,
   "secondary": 2,
-  "shape": "rhomb"
+  "shape": "rhomb",
+  "weight": 6
  },
  {
   "index": 3,
   "primary": 1,
   "secondary": 1,
-  "shape": "triangle"
+  "shape": "triangle",
+  "weight": 8
  },
  {
   "index": 4,
   "primary": 1,
   "secondary": 1,
-  "shape": "deadlock"
+  "shape": "deadlock",
+  "weight": 5
  },
  {
   "index": 5,
   "primary": 1,
   "secondary": 2,
-  "shape": "deadlock"
+  "shape": "deadlock",
+  "weight": 3
  },
  {
   "index": 6,
-  "primary": 2,
+  "primary": 1,
   "secondary": 2,
-  "shape": "rectangle"
+  "shape": "triangle",
+  "weight": 6
  },
  {
   "index": 7,
   "primary": 2,
   "secondary": 2,
-  "shape": "rectangle"
+  "shape": "deadlock",
+  "weight": 1
  },
  {
   "index": 8,
   "primary": 2,
   "secondary": 2,
-  "shape": "deadlock"
+  "shape": "triangle",
+  "weight": 4
  },
  {
   "index": 9,
   "primary": 2,
-  "secondary": 3,
-  "shape": "trapeze"
+  "secondary": 2,
+  "shape": "rectangle",
+  "weight": 3
  },
  {
   "index": 10,
-  "primary": 3,
+  "primary": 2,
   "secondary": 3,
-  "shape": "trapeze"
+  "shape": "trapeze",
+  "weight": 5
  },
  {
   "index": 11,
+  "primary": 3,
+  "secondary": 3,
+  "shape": "trapeze",
+  "weight": 3
+ },
+ {
+  "index": 12,
   "primary": 4,
   "secondary": 4,
-  "shape": "rectangle"
+  "shape": "rectangle",
+  "weight": 2
  }
 ]

@@ -20,6 +20,6 @@ func set_attributes(input_: Dictionary) -> void:
 func init_basic_setting() -> void:
 	var input = {}
 	input.vastness = self
+	oasis.set_attributes(input)
 	horizon.set_attributes(input)
 	soil.set_attributes(input)
-	oasis.set_attributes(input)

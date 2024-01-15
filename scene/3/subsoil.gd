@@ -11,6 +11,7 @@ extends MarginContainer
 
 var soil = null
 var sky = null
+var oasis = null
 var center = null
 var grids = {}
 var fringe = {}
@@ -33,6 +34,7 @@ func set_attributes(input_: Dictionary) -> void:
 
 func init_basic_setting() -> void:
 	sky = soil.vastness.horizon.sky
+	oasis = soil.vastness.oasis
 	custom_minimum_size = Vector2(Global.vec.size.subsoil)
 	center = custom_minimum_size * 0.5
 	
@@ -205,6 +207,7 @@ func design_shape() -> void:
 	var description = Global.dict.fringe.index[axises.index]
 	var func_name = "design_" + description.shape + "_shape"
 	call(func_name)
+	oasis.init_mirages()
 
 
 func design_rhomb_shape() -> void:
@@ -407,4 +410,4 @@ func take_to_sky() -> void:
 
 
 func roll_fringe_index() -> void:
-	axises.index = Global.get_random_key(Global.dict.fringe.weight) 
+	axises.index = 9#Global.get_random_key(Global.dict.fringe.weight) 

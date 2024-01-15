@@ -38,8 +38,8 @@ layout_mode = 2
 [node name="Socket" parent="HBox" instance=ExtResource("1_ckv36")]
 layout_mode = 2
 
-[node name="Turns" parent="HBox" instance=ExtResource("1_ckv36")]
+[node name="Flips" parent="HBox" instance=ExtResource("1_ckv36")]
 layout_mode = 2
 
-[node name="Flips" parent="HBox" instance=ExtResource("1_ckv36")]
+[node name="Turns" parent="HBox" instance=ExtResource("1_ckv36")]
 layout_mode = 2

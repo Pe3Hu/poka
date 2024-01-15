@@ -145,3 +145,52 @@ func flip() -> void:
 	stars = fliped_stars
 	set_vertexs()
 
+
+func repetition_check_based_on_trefoil(trefoil_: Polygon2D) -> bool:
+	var trefoils = [self, trefoil_]
+	var indexs = {}
+	
+	for trefoil in trefoils:
+		indexs[trefoil] = []
+		
+		for star in trefoil.stars:
+			var index = star.index.get_number()
+			indexs[trefoil].append(index)
+		
+		indexs[trefoil].sort_custom(func(a, b): return a < b)
+	
+	for _i in indexs[self].size():
+		if indexs[self][_i] != indexs[trefoil_][_i]:
+			return false
+	
+	return true
+
+
+func repetition_check_on_rotation(flips_: int, turns_: int) -> bool:
+	var rotated_stars = []
+	var indexs = {}
+	indexs.original = []
+	indexs.rotated = []
+	
+	for star in stars:
+		var index = star.index.get_number()
+		indexs.original.append(index)
+		var _star = star
+		
+		for _i in flips_:
+			_star = fusion.proprietor.flips.star[_star]
+		
+		for _i in turns_:
+			_star = fusion.proprietor.turns.star["clockwise"][_star]
+		
+		index = _star.index.get_number()
+		indexs.rotated.append(index)
+	
+	for key in indexs:
+		indexs[key].sort_custom(func(a, b): return a < b)
+	
+	for _i in indexs.original.size():
+		if indexs.original[_i] != indexs.rotated[_i]:
+			return false
+	
+	return true
