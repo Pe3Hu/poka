@@ -17,7 +17,7 @@ func _input(event) -> void:
 		match event.keycode:
 			KEY_SPACE:
 				if event.is_pressed() && !event.is_echo():
-					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.take_to_sky()
+					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.oasis.choose_best()
 			KEY_A:
 				if event.is_pressed() && !event.is_echo():
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.shift_axises_index(-1)

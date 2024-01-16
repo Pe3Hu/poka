@@ -49,7 +49,6 @@ func init_turns_and_flips(input_: Dictionary) -> void:
 	turns.set_attributes(input)
 #endregion
 
-
 #region checks
 func repetition_check(mirage_: MarginContainer) -> bool:
 	var flag = stars_repetition_check(mirage_)
@@ -159,11 +158,11 @@ func compliance_check() -> bool:
 
 
 func cords_check() -> bool:
-	if Global.num.index.fusion == 2:
-		print([socket.index.get_number(), ">>>", flips.get_number(), turns.get_number()])
 	var _cords = {}
 	_cords.socket = socket.core.get_cords_around_socket_perimeter()
 	_cords.fusion = fusion.proprietor.core.get_cords_around_socket_perimeter()
+	var revocations = []
+	var flag = true
 	
 	for cord in _cords.fusion:
 		if !cords.has(cord):
@@ -182,10 +181,34 @@ func cords_check() -> bool:
 				vocation = cord.socket.trefoils.front().vocation
 			
 			if vocation != cords[cord.fusion]:
-				if Global.num.index.fusion == 2:
-					print(["???", cord.socket.index.get_number(), cord.fusion.index.get_number()])
-				return false
-			
+				if vocation != null and cords[cord.fusion] != null:
+					revocations.append([cord.socket, cord.fusion])
+				flag = false
 	
-	return true
+	if !sky.slots.priority.is_empty():
+		for _revocations in revocations:
+			print([_revocations[0].index.get_number(), _revocations[0].trefoils.front().vocation, _revocations[1].index.get_number(), cords[_revocations[1]]])
+	
+	return flag
 #endregion
+
+
+func apply() -> void:
+	fusion.adjust(self)
+	take_to_sky()
+
+
+func take_to_sky() -> void:
+	fusion.proprietor.fusions.remove_child(fusion)
+	fusion.proprietor.soil.fusions.add_child(fusion)
+	fusion.init_vocations()
+	
+	while fusion.proprietor.trefoils.get_child_count() > 0:
+		var trefoil = fusion.proprietor.trefoils.get_child(0)
+		fusion.proprietor.trefoils.remove_child(trefoil)
+		sky.trefoil_transfer(trefoil, socket)
+	
+	sky.update_slots(socket)
+	fusion.proprietor.roll_fringe_index()
+	fusion.proprietor.design_shape()
+	#fusion.proprietor.reset()

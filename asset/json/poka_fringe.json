@@ -4,28 +4,40 @@
   "primary": 0,
   "secondary": 1,
   "shape": "deadlock",
-  "weight": 9
+  "weight": 9,
+  "donor primary": 0,
+  "donor secondary": 1,
+  "donor comparison": "single"
  },
  {
   "index": 1,
   "primary": 0,
   "secondary": 2,
   "shape": "deadlock",
-  "weight": 7
+  "weight": 7,
+  "donor primary": 0,
+  "donor secondary": 2,
+  "donor comparison": "single"
  },
  {
   "index": 2,
   "primary": 0,
   "secondary": 2,
   "shape": "rhomb",
-  "weight": 6
+  "weight": 6,
+  "donor primary": 0,
+  "donor secondary": 1,
+  "donor comparison": "single"
  },
  {
   "index": 3,
   "primary": 1,
   "secondary": 1,
   "shape": "triangle",
-  "weight": 8
+  "weight": 8,
+  "donor primary": 1,
+  "donor secondary": 1,
+  "donor comparison": "same"
  },
  {
   "index": 4,
@@ -39,14 +51,20 @@
   "primary": 1,
   "secondary": 2,
   "shape": "deadlock",
-  "weight": 3
+  "weight": 3,
+  "donor primary": 1,
+  "donor secondary": 1,
+  "donor comparison": "different"
  },
  {
   "index": 6,
   "primary": 1,
   "secondary": 2,
   "shape": "triangle",
-  "weight": 6
+  "weight": 6,
+  "donor primary": 1,
+  "donor secondary": 2,
+  "donor comparison": "none"
  },
  {
   "index": 7,
@@ -60,34 +78,49 @@
   "primary": 2,
   "secondary": 2,
   "shape": "triangle",
-  "weight": 4
+  "weight": 4,
+  "donor primary": 2,
+  "donor secondary": 2,
+  "donor comparison": "same"
  },
  {
   "index": 9,
   "primary": 2,
   "secondary": 2,
   "shape": "rectangle",
-  "weight": 3
+  "weight": 3,
+  "donor primary": 1,
+  "donor secondary": 2,
+  "donor comparison": "same"
  },
  {
   "index": 10,
   "primary": 2,
   "secondary": 3,
   "shape": "trapeze",
-  "weight": 5
+  "weight": 5,
+  "donor primary": 1,
+  "donor secondary": 2,
+  "donor comparison": "same"
  },
  {
   "index": 11,
   "primary": 3,
   "secondary": 3,
   "shape": "trapeze",
-  "weight": 3
+  "weight": 3,
+  "donor primary": 2,
+  "donor secondary": 2,
+  "donor comparison": "different"
  },
  {
   "index": 12,
   "primary": 4,
   "secondary": 4,
   "shape": "rectangle",
-  "weight": 2
+  "weight": 2,
+  "donor primary": 2,
+  "donor secondary": 2,
+  "donor comparison": "different"
  }
 ]

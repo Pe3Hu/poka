@@ -22,6 +22,7 @@ var cycle = []
 var chain = []
 var turns = {}
 var flips = {}
+var request = null
 #endregion
 
 
@@ -197,15 +198,23 @@ func init_flips() -> void:
 func init_fusion() -> void:
 	axises.index = 10
 	design_shape()
-	take_to_sky()
+	oasis.choose_best()
 
 
 #region of design shape
 func design_shape() -> void:
 	reset()
+	
+	if !sky.slots.priority.is_empty():
+		design_shape_based_on_priority()
+		
 	var description = Global.dict.fringe.index[axises.index]
 	var func_name = "design_" + description.shape + "_shape"
 	call(func_name)
+	
+	if !sky.slots.priority.is_empty():
+		pass
+	
 	oasis.init_mirages()
 
 
@@ -221,7 +230,6 @@ func design_rhomb_shape() -> void:
 	cord = sides.cord[mirror][index]
 	_cords.append(cord)
 	
-	
 	add_fusion(_cords)
 
 
@@ -231,22 +239,30 @@ func design_triangle_shape() -> void:
 	var axis = Global.arr.axis.pick_random()
 	var cord = axises.cord[axis].pick_random()
 	_cords.append(cord)
-	
 	var _stars = {}
 	
 	for star in cord.stars:
 		match star.sides.size():
 			1:
-				_stars["edge"] = star
+				_stars["edge"] = [star]
 			2:
 				_stars["corner"] = star
 	
 	for _cord in _stars["corner"].cords:
 		if _cord != cord:
 			_cords.append(_cord)
+			
+			for star in _cord.stars:
+				if star.sides.size() == 1:
+					_stars["edge"].append(star)
 	
-	if description.primary > 1 or description.secondary > 1:
-		for _cord in _stars["edge"].cords:
+	var n = description.primary + description.secondary - 2
+	
+	for _i in n:
+		var star = _stars["edge"].pick_random()
+		_stars["edge"].erase(star)
+		
+		for _cord in star.cords:
 			if _cord != cord:
 				_cords.append(_cord)
 	
@@ -341,7 +357,24 @@ func design_deadlock_shape() -> void:
 			options.erase(_cord)
 	
 	add_fusion(_cords)
-#endregion
+
+
+func cords_repetition_check(mirage_: MarginContainer) -> bool:
+	var mirages = [self, mirage_]
+	
+	for mirage in mirages:
+		mirage.fill_cords()
+	
+	for _i in cords.keys().size():
+		var cord = cords.keys()[_i]
+		
+		if !mirage_.cords.has(cord):
+			return false
+		
+		if cords[cord].vocation != mirage_.cords[cord].vocation:
+			return false
+	
+	return true
 
 
 func add_fusion(cords_: Array) -> void:
@@ -355,14 +388,6 @@ func add_fusion(cords_: Array) -> void:
 	fusion.set_attributes(input)
 
 
-func shift_axises_index(shift_: int) -> void:
-	Global.num.index.fusion -= 1
-	get_fusion()
-	var n = Global.dict.fringe.index.keys().size()
-	axises.index = (axises.index + shift_ + n) % n
-	design_shape()
-
-
 func get_fusion() -> Variant:
 	if fusions.get_child_count() > 0:
 		var fusion = fusions.get_child(0)
@@ -373,11 +398,23 @@ func get_fusion() -> Variant:
 
 
 func reset() -> void:
+	get_fusion()
+	
 	while trefoils.get_child_count() > 0:
 		var trefoil = trefoils.get_child(0)
 		trefoils.remove_child(trefoil)
 		trefoil.queue_free()
 		Global.num.index.trefoil -= 1
+
+#endregion
+
+
+func shift_axises_index(shift_: int) -> void:
+	Global.num.index.fusion -= 1
+	get_fusion()
+	var n = Global.dict.fringe.index.keys().size()
+	axises.index = (axises.index + shift_ + n) % n
+	design_shape()
 
 
 func turn_fusion(shift_: int) -> void:
@@ -390,25 +427,8 @@ func flip_fusion() -> void:
 	fusion.flip()
 
 
-func take_to_sky() -> void:
-	var socket = sky.slots.available.front()
-	var fusion = get_fusion()
-	soil.fusions.add_child(fusion)
-	fusion.init_vocations()
-	
-	while trefoils.get_child_count() > 0:
-		var trefoil = trefoils.get_child(0)
-		trefoils.remove_child(trefoil)
-		sky.trefoil_transfer(trefoil, socket)
-	
-	sky.update_slots(socket)
-	roll_fringe_index()
-	design_shape()
-	#reset()
-
-
 func roll_fringe_index() -> void:
-	axises.index = 9#Global.get_random_key(Global.dict.fringe.weight) 
+	axises.index = Global.get_random_key(Global.dict.fringe.weight) 
 
 
 func get_cords_based_on_stars(stars_: Array) -> Array:
@@ -434,3 +454,59 @@ func get_cords_based_on_stars(stars_: Array) -> Array:
 	
 	#_cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
 	return _cords
+
+
+func design_shape_based_on_priority() -> void:
+	var priority = sky.slots.priority.front()
+	var cords = []
+	var _trefoils = {}
+	var data = {}
+	data.comparison = "single"
+	data.primary = 0
+	
+	for _i in priority.cords.size():
+		var cord = priority.cords[_i]
+		
+		if !cord.trefoils.is_empty():
+			var trefoil = cord.trefoils.front()
+			
+			if !_trefoils.has(trefoil):
+				_trefoils[trefoil] = 0
+			
+			_trefoils[trefoil] += 1
+	
+	if _trefoils.keys().is_empty():
+		data.primary = 1
+		data.secondary = 2
+		data.comparison = "none"
+	else:
+		var trefoil_a = _trefoils.keys().front()
+		data.secondary = _trefoils[trefoil_a]
+		
+		if _trefoils.keys().size() > 1:
+			var trefoil_b = _trefoils.keys().back()
+			data.primary = _trefoils[trefoil_b]
+			data.comparison = "same"
+			
+			if _trefoils[trefoil_b] > _trefoils[trefoil_a]:
+				data.secondary = _trefoils[trefoil_b]
+				data.primary = _trefoils[trefoil_a]
+			
+			if trefoil_b.vocation != trefoil_a.vocation:
+				data.comparison = "different"
+	
+	set_fringe_index_based_on_cords(data)
+
+
+func set_fringe_index_based_on_cords(data_: Dictionary) -> void:
+	var indexs = []
+	indexs.append_array(Global.dict.fringe.donor[data_.comparison])
+	
+	for _i in range(indexs.size()-1,-1,-1):
+		var index = indexs[_i]
+		var description = Global.dict.fringe.index[index]
+		
+		if data_.primary != description.donor.primary or data_.secondary != description.donor.secondary:
+			indexs.erase(index)
+	
+	axises.index = indexs.pick_random()

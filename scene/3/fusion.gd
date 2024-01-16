@@ -62,14 +62,14 @@ func init_trefoils() -> void:
 			#if repeats[star] == 2:
 				#stars.erase(star)
 		#
-		#stars.push_front(proprietor.decors.star)
+		#stars.push_front(proprietor.core)
 		#add_trefoil(stars)
 	
 	if shape == "deadlock":
-		stars.push_front(proprietor.decors.star)
+		stars.push_front(proprietor.core)
 		
 		for cord in cords:
-			_stars = [proprietor.decors.star]
+			_stars = [proprietor.core]
 			_stars.append_array(cord.stars)
 			add_trefoil(_stars)
 			
@@ -223,22 +223,6 @@ func revocation_from_neighbors(trefoil_: Polygon2D) -> void:
 	trefoil_.revocation_from(neighbor)
 
 
-func turn(shift_: int) -> void:
-	var _index = (shift_ + 1 ) / 2
-	var direction = Global.arr.turn[_index]
-	turns = (turns + shift_ + Global.arr.turn.size()) % Global.arr.turn.size()
-	
-	for trefoil in trefoils:
-		trefoil.turn(direction)
-
-
-func flip() -> void:
-	flips = (flips + 1) % 2
-	
-	for trefoil in trefoils:
-		trefoil.flip()
-
-
 func init_vocations() -> void:
 	var squares = {}
 	
@@ -261,3 +245,32 @@ func init_vocations() -> void:
 		icon.bg.set("theme_override_styles/panel", style)
 		style.bg_color = Global.color.vocation[vocation]
 		icon.bg.visible = true
+
+
+func turn(shift_: int) -> void:
+	if shift_ != 0:
+		var _index = (sign(shift_) + 1) / 2
+		var direction = Global.arr.turn[_index]
+		turns = (turns + shift_ + Global.arr.turn.size()) % Global.arr.turn.size()
+		
+		for _i in abs(shift_):
+			for trefoil in trefoils:
+				trefoil.turn(direction)
+
+
+func flip() -> void:
+	flips = (flips + 1) % 2
+	
+	for trefoil in trefoils:
+		trefoil.flip()
+
+
+func adjust(mirage_: MarginContainer) -> void:
+	var shifts = {}
+	shifts.flips = (mirage_.flips.get_number() - flips + 2) % 2
+	shifts.turns = (mirage_.turns.get_number() - turns + 4) % 4
+	
+	for _i in shifts.flips:
+		flip()
+	
+	turn(shifts.turns)

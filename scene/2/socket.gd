@@ -12,6 +12,7 @@ var neighbors = []
 var cords = []
 var grid = Vector2()
 var status = null
+var restraints = []
 #endregion
 
 
@@ -69,6 +70,7 @@ func advance_status() -> void:
 #endregion
 
 
+#region paint
 func paint_to_match() -> void:
 	color = Global.color.socket[status]
 
@@ -76,4 +78,12 @@ func paint_to_match() -> void:
 func paint_based_on_index() -> void:
 	var hue = index.get_number() * 1.0 / Global.num.index.socket
 	color = Color.from_hsv(hue, 0.6, 0.7)
+#endregion
 
+
+func add_restraint(socket_: Polygon2D) -> void:
+	if status == "available":
+		restraints.append(socket_)
+		
+		if restraints.size() == 2:
+			proprietor.slots.priority.append(self)

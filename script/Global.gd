@@ -77,18 +77,34 @@ func init_num() -> void:
 
 
 func init_dict() -> void:
-	init_neighbor()
-	init_corner()
+	init_chain()
 	init_side()
+	init_corner()
+	init_card()
+	init_neighbor()
 	init_fringe()
 	init_vocation()
-	
+
+
+func init_chain() -> void:
 	dict.chain = {}
 	dict.chain.status = {}
 	dict.chain.status[null] = "unavailable"
 	dict.chain.status["unavailable"] = "available"
 	dict.chain.status["available"] = "incomplete"
 	dict.chain.status["incomplete"] = "completed"
+	
+	dict.chain.area = {}
+	dict.chain.area[null] = "discharged"
+	dict.chain.area["discharged"] = "available"
+	dict.chain.area["available"] = "hand"
+	dict.chain.area["hand"] = "discharged"
+	dict.chain.area["broken"] = "discharged"
+	
+	dict.donor = {}
+	dict.donor.area = {}
+	dict.donor.area["available"] = "discharged"
+	dict.donor.area["hand"] = "available"
 
 
 func init_side() -> void:
@@ -107,6 +123,39 @@ func init_side() -> void:
 	dict.axis.mirror["x"] = "y"
 	dict.axis.mirror["y"] = "x"
 
+
+func init_corner() -> void:
+	dict.order = {}
+	dict.order.pair = {}
+	dict.order.pair["even"] = "odd"
+	dict.order.pair["odd"] = "even"
+	var corners = [3,4,6]
+	dict.corner = {}
+	dict.corner.vector = {}
+	
+	for corners_ in corners:
+		dict.corner.vector[corners_] = {}
+		dict.corner.vector[corners_].even = {}
+		
+		for order_ in dict.order.pair.keys():
+			dict.corner.vector[corners_][order_] = {}
+		
+			for _i in corners_:
+				var angle = 2 * PI * _i / corners_ - PI / 2
+				
+				if order_ == "odd":
+					angle += PI/corners_
+				
+				var vertex = Vector2(1,0).rotated(angle)
+				dict.corner.vector[corners_][order_][_i] = vertex
+
+
+func init_card() -> void:
+	dict.card = {}
+	dict.card.count = {}
+	
+	for rank in arr.rank:
+		dict.card.count[rank] = arr.rank.front() + arr.rank.back() - rank
 
 func init_neighbor() -> void:
 	dict.neighbor = {}
@@ -154,37 +203,12 @@ func init_neighbor() -> void:
 	]
 
 
-func init_corner() -> void:
-	dict.order = {}
-	dict.order.pair = {}
-	dict.order.pair["even"] = "odd"
-	dict.order.pair["odd"] = "even"
-	var corners = [3,4,6]
-	dict.corner = {}
-	dict.corner.vector = {}
-	
-	for corners_ in corners:
-		dict.corner.vector[corners_] = {}
-		dict.corner.vector[corners_].even = {}
-		
-		for order_ in dict.order.pair.keys():
-			dict.corner.vector[corners_][order_] = {}
-		
-			for _i in corners_:
-				var angle = 2 * PI * _i / corners_ - PI / 2
-				
-				if order_ == "odd":
-					angle += PI/corners_
-				
-				var vertex = Vector2(1,0).rotated(angle)
-				dict.corner.vector[corners_][order_][_i] = vertex
-
-
 func init_fringe() -> void:
 	dict.fringe = {}
 	dict.fringe.index = {}
 	dict.fringe.shape = {}
 	dict.fringe.weight = {}
+	dict.fringe.donor = {}
 	
 	var path = "res://asset/json/poka_fringe.json"
 	var array = load_data(path)
@@ -193,10 +217,24 @@ func init_fringe() -> void:
 	for fringe in array:
 		fringe.index = int(fringe.index)
 		var data = {}
+		data.donor = {}
 		
 		for key in fringe:
 			if !exceptions.has(key):
-				data[key] = fringe[key]
+				var words = key.split(" ")
+				
+				if words.has("donor"):
+					data.donor[words[1]] = fringe[key]
+				else:
+					data[key] = fringe[key]
+		
+		if data.donor.keys().is_empty():
+			data.erase("donor")
+		else:
+			if !dict.fringe.donor.has(data.donor.comparison):
+				dict.fringe.donor[data.donor.comparison] = []
+			
+			dict.fringe.donor[data.donor.comparison].append(fringe.index)
 		
 		dict.fringe.index[fringe.index] = data
 		dict.fringe.weight[fringe.index] = fringe.index
@@ -253,6 +291,8 @@ func init_scene() -> void:
 	scene.trefoil = load("res://scene/3/trefoil.tscn")
 	
 	scene.mirage = load("res://scene/4/mirage.tscn")
+	
+	scene.card = load("res://scene/5/card.tscn")
 
 
 func init_vec():

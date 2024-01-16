@@ -139,6 +139,7 @@ func init_sockets() -> void:
 	slots.available = []
 	slots.incomplete = []
 	slots.completed = []
+	slots.priority = []
 	
 	for _i in range(1, Global.num.sky.row, 2):
 		for _j in range(1, Global.num.sky.col, 2):
@@ -167,11 +168,15 @@ func init_sockets_neighbors() -> void:
 
 
 func update_slots(socket_: Polygon2D) -> void:
+	var flag = slots.available.is_empty()
 	advance_socket(socket_)
 	
-	for neighbor in socket_.neighbors:
-		if slots.unavailable.has(neighbor):
-			advance_socket(neighbor)
+	if !flag:
+		for neighbor in socket_.neighbors:
+			if slots.unavailable.has(neighbor):
+				advance_socket(neighbor)
+			
+			neighbor.add_restraint(socket_)
 
 
 func advance_socket(socket_: Polygon2D) -> void:
@@ -226,3 +231,4 @@ func get_cords_based_on_stars(stars_: Array) -> Array:
 	
 	#_cords.sort_custom(func(a, b): return a.index.get_number() < b.index.get_number())
 	return _cords
+

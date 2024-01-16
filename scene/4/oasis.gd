@@ -68,9 +68,18 @@ func init_mirages_checks() -> void:
 		
 		if !mirage.compliance_check():
 			kick(mirage)
+	
+	#if mirages.get_child_count() == 0:
+	#	subsoil.design_shape()
 #endregion
 
 
 func kick(mirage_: MarginContainer) -> void:
 	mirages.remove_child(mirage_)
 	mirage_.queue_free()
+
+
+func choose_best() -> void:
+	if mirages.get_child_count() > 0:
+		var mirage = mirages.get_child(0)
+		mirage.apply()

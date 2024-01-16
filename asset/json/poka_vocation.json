@@ -1,56 +1,38 @@
 [
 	{
-		"title": "assassin",
+		"title": "A1",
 		"hue": 0,
 		"rarity": 9,
 		"crux": "booster"
 	},
 	{
-		"title": "protector",
-		"hue": 80,
-		"rarity": 6,
+		"title": "A2",
+		"hue": 60,
+		"rarity": 7,
 		"crux": "booster"
 	},
 	{
-		"title": "medic",
-		"hue": 40,
-		"rarity": 3,
-		"crux": "booster"
-	},
-	{
-		"title": "beast",
-		"hue": 320,
+		"title": "B1",
+		"hue": 120,
 		"rarity": 7,
 		"crux": "wobble"
 	},
 	{
-		"title": "undead",
+		"title": "B2",
+		"hue": 150,
+		"rarity": 7,
+		"crux": "wobble"
+	},
+	{
+		"title": "C1",
+		"hue": 210,
+		"rarity": 5,
+		"crux": "chance"
+	},
+	{
+		"title": "C2",
 		"hue": 240,
 		"rarity": 5,
-		"crux": "wobble"
-	},
-	{
-		"title": "spirit",
-		"hue": 280,
-		"rarity": 3,
-		"crux": "wobble"
-	},
-	{
-		"title": "bard",
-		"hue": 120,
-		"rarity": 6,
-		"crux": "chance"
-	},
-	{
-		"title": "judge",
-		"hue": 160,
-		"rarity": 5,
-		"crux": "chance"
-	},
-	{
-		"title": "jester",
-		"hue": 200,
-		"rarity": 4,
 		"crux": "chance"
 	}
 ]
