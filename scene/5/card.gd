@@ -3,41 +3,75 @@ extends MarginContainer
 
 #region vars
 @onready var bg = $BG
-@onready var suit = $Suit
-@onready var rank = $Rank
+@onready var suit = $VBox/Suit
+@onready var tokens = $VBox/Tokens
 
 var area = null
 var gameboard = null
+var rank = null
+var performer = null
 #endregion
 
 
 #region init
 func set_attributes(input_: Dictionary) -> void:
 	gameboard = input_.gameboard
+	rank = input_.rank
+	performer = input_.performer
 	
-	init_basic_setting(input_)
+	init_basic_setting()
 
 
-func init_basic_setting(input_: Dictionary) -> void:
+func init_basic_setting() -> void:
 	var input = {}
-	input.type = "suit"
-	input.subtype = input_.suit
+	input.card = self
 	suit.set_attributes(input)
-	custom_minimum_size = Global.vec.size.suit
-	
-	input.type = "number"
-	input.subtype = input_.rank
-	rank.set_attributes(input)
-	rank.custom_minimum_size = Global.vec.size.rank
-	
-	#suit.set("theme_override_constants/margin_left", 4)
-	#suit.set("theme_override_constants/margin_top", 4)
-	custom_minimum_size = suit.custom_minimum_size + rank.custom_minimum_size * 0.5
+	#set_selected(false)
+	roll_tokens()
 
+
+func roll_tokens() -> void:
+	var points = int(rank)
+	var description = Global.dict.performer.token[performer]
+	var weights = {}
 	
-	var style = StyleBoxFlat.new()
-	bg.set("theme_override_styles/panel", style)
-	set_selected(false)
+	for token in description:
+		var data = description[token]
+		
+		if points >= data.weight:
+			if !weights.has(data.weight):
+				weights[data.weight] = []
+			
+			weights[data.weight].append(token)
+		
+	var ordered = weights.keys()
+	ordered.sort()
+	var values = {}
+	
+	while points > 0 and !ordered.is_empty():
+		var weight = ordered.back()
+		var token = weights[weight].pick_random()
+		
+		if !values.has(token):
+			values[token] = 0
+		
+		values[token] += description[token].value
+		points -= description[token].weight
+		
+		if points > 0:
+			while ordered.back() > points:
+				ordered.pop_back()
+	
+	for appellation in values:
+		var input = {}
+		input.card = self
+		input.appellation = appellation
+		input.stack = values[appellation]
+		input.target = description[appellation].target
+	
+		var token = Global.scene.token.instantiate()
+		tokens.add_child(token)
+		token.set_attributes(input)
 #endregion
 
 
@@ -65,3 +99,6 @@ func advance_area() -> void:
 		area = Global.dict.chain.area[area]
 		cardstack = gameboard.get(area)
 		cardstack.cards.add_child(self)
+	
+	if area == "hand" and gameboard.god.combo != null:
+		gameboard.god.combo.add_pawn(self)

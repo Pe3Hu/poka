@@ -1,18 +1,20 @@
 extends MarginContainer
 
 
+#region vars
 @onready var cards = $Cards
 
 var gameboard = null
 var type = null
 var capacity = {}
+#endregion
 
 
 func set_attributes(input_: Dictionary) -> void:
 	gameboard = input_.gameboard
 	type = input_.type
 	
-	capacity.current = 6
+	capacity.current = 2
 	capacity.limit = 10
 
 

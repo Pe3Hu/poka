@@ -11,6 +11,7 @@ var god = null
 #endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	god = input_.god
 	input_.gameboard = self
@@ -26,18 +27,16 @@ func init_basic_setting(input_: Dictionary) -> void:
 			input_.type = key
 			var cardstack = get(key)
 			cardstack.set_attributes(input_)
-	
-	next_turn()
 
 
 func init_starter_kit_cards() -> void:
-	for suit in Global.arr.suit:
+	for performer in Global.arr.performer:
 		for rank in Global.arr.rank:
 			for _i in Global.dict.card.count:
 				var input = {}
 				input.gameboard = self
 				input.rank = rank
-				input.suit = suit
+				input.performer = performer
 			
 				var card = Global.scene.card.instantiate()
 				discharged.cards.add_child(card)
@@ -48,8 +47,4 @@ func init_starter_kit_cards() -> void:
 	
 	#print("___")
 	#reshuffle_available()
-
-
-
-func next_turn() -> void:
-	hand.refill()
+#endregion

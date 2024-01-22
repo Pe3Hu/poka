@@ -36,12 +36,17 @@ func init_arr() -> void:
 	arr.indicator = ["health", "energy"]
 	arr.organ = ["supplier", "fringe"]
 	arr.axis = ["x", "y"]
-	arr.side = ["up", "right", "down", "left"]
+	arr.side = ["left", "right"]
 	arr.turn = ["counterclockwise", "clockwise"]
+	arr.state = ["vigor", "standard", "fatigue"]
+	arr.medal = ["winner", "loser"]
+	arr.phase = ["dawn", "noon", "dusk"]
 
 
 func init_num() -> void:
 	num.index = {}
+	num.index.god = 0
+	num.index.card = 0
 	num.index.star = 0
 	num.index.cord = 0
 	num.index.block = 0
@@ -74,6 +79,9 @@ func init_num() -> void:
 	num.mirage = {}
 	num.mirage.flips = 2
 	num.mirage.turns = 4
+	
+	num.apotheosis = {}
+	num.apotheosis.amount = 24
 
 
 func init_dict() -> void:
@@ -84,6 +92,8 @@ func init_dict() -> void:
 	init_neighbor()
 	init_fringe()
 	init_vocation()
+	init_token()
+	init_performer()
 
 
 func init_chain() -> void:
@@ -101,10 +111,35 @@ func init_chain() -> void:
 	dict.chain.area["hand"] = "discharged"
 	dict.chain.area["broken"] = "discharged"
 	
+	dict.chain.side = {}
+	dict.chain.side["right"] = "left"
+	dict.chain.side["left"] = "right"
+	
+	dict.chain.state = {}
+	dict.chain.state["fatigue"] = "standard"
+	dict.chain.state["standard"] = "vigor"
+	dict.chain.state["vigor"] = null
+	
+	dict.chain.phase = {}
+	dict.chain.phase["dawn"] = "noon"
+	dict.chain.phase["noon"] = "dusk"
+	dict.chain.phase["dusk"] = "dawn"
+	
 	dict.donor = {}
 	dict.donor.area = {}
 	dict.donor.area["available"] = "discharged"
 	dict.donor.area["hand"] = "available"
+	
+	dict.donor.state = {}
+	dict.donor.state["vigor"] = "standard"
+	dict.donor.state["standard"] = "fatigue"
+	dict.donor.state["fatigue"] = null
+	
+	dict.phase = {}
+	dict.phase.stage = {}
+	dict.phase.stage["dawn"] = ["preparing"]
+	dict.phase.stage["noon"] = ["balancing"]
+	dict.phase.stage["dusk"] = ["reckoning"]
 
 
 func init_side() -> void:
@@ -151,11 +186,14 @@ func init_corner() -> void:
 
 
 func init_card() -> void:
+	arr.rank = [3, 4, 6, 8, 12]
 	dict.card = {}
 	dict.card.count = {}
+	arr.performer = ["heretic"]#["clubs", "diamonds", "hearts", "spades"]
 	
 	for rank in arr.rank:
-		dict.card.count[rank] = arr.rank.front() + arr.rank.back() - rank
+		dict.card.count[rank] = num.apotheosis.amount / rank
+
 
 func init_neighbor() -> void:
 	dict.neighbor = {}
@@ -271,6 +309,48 @@ func init_vocation() -> void:
 		color.vocation[vocation.title] = Color.from_hsv(vocation.hue / 360.0, 0.9, 0.7)
 
 
+func init_token() -> void:
+	dict.token = {}
+	dict.token.title = {}
+	
+	var path = "res://asset/json/poka_token.json"
+	var array = load_data(path)
+	var exceptions = ["title"]
+	
+	for token in array:
+		var data = {}
+		
+		for key in token:
+			if !exceptions.has(key):
+				data[key] = token[key]
+		
+		dict.token.title[token.title] = data
+
+
+func init_performer() -> void:
+	dict.performer = {}
+	dict.performer.token = {}
+	
+	var path = "res://asset/json/poka_performer.json"
+	var array = load_data(path)
+	var exceptions = ["title", "token"]
+	
+	for performer in array:
+		var data = {}
+		
+		for key in performer:
+			if !exceptions.has(key):
+				data[key] = performer[key]
+				
+				if typeof(performer[key]) == TYPE_FLOAT:
+					data[key] = int(performer[key])
+		
+		if !dict.performer.token.has(performer.title):
+			dict.performer.token[performer.title] = {}
+		
+		dict.performer.token[performer.title][performer.token] = data
+
+
 func init_node() -> void:
 	node.game = get_node("/root/Game")
 
@@ -280,7 +360,6 @@ func init_scene() -> void:
 	
 	scene.pantheon = load("res://scene/1/pantheon.tscn")
 	scene.god = load("res://scene/1/god.tscn")
-	
 	
 	scene.star = load("res://scene/2/star.tscn")
 	scene.cord = load("res://scene/2/cord.tscn")
@@ -293,34 +372,31 @@ func init_scene() -> void:
 	scene.mirage = load("res://scene/4/mirage.tscn")
 	
 	scene.card = load("res://scene/5/card.tscn")
+	scene.token = load("res://scene/5/token.tscn")
+	
+	scene.table = load("res://scene/6/table.tscn")
+	scene.pawn = load("res://scene/6/pawn.tscn")
 
 
 func init_vec():
 	vec.size = {}
-	vec.size.letter = Vector2(20, 20)
-	vec.size.icon = Vector2(48, 48)
 	vec.size.sixteen = Vector2(16, 16)
-	vec.size.number = Vector2(24, 16)
 	
 	vec.size.suit = Vector2(32, 32)
 	vec.size.rank = Vector2(vec.size.sixteen)
-	vec.size.box = Vector2(100, 100)
+	vec.size.combo = Vector2(vec.size.sixteen) * 2
+	vec.size.god = Vector2(vec.size.sixteen) * 3
+	vec.size.libra = Vector2(vec.size.sixteen) * 4
+	vec.size.performer = Vector2(32, 32)
+	vec.size.pawn = Vector2(32, 32)
+	vec.size.indicator = Vector2(32, 32)
+	vec.size.power = Vector2(vec.size.sixteen) * 1.5
+	vec.size.border = Vector2(vec.size.power)
+	vec.size.token = Vector2(48, 48)
+	vec.size.target = Vector2(64, 64)
 	
-	vec.size.location = Vector2(60, 60)
-	vec.size.scheme = Vector2(900, 700)
-	vec.size.encounter = Vector2(128, 200)
-	vec.size.facet = Vector2(64, 64) * 0.5
-	vec.size.tattoo = Vector2(16, 16) * 3
-	vec.size.essence = Vector2(16, 16) * 2
-	vec.size.trigger = Vector2(16, 16) * 2
-	vec.size.place = Vector2(16, 16) * 1.5
 	
-	vec.size.bar = Vector2(32, 16)
-	vec.size.damage = Vector2(32, 32)
-	
-	vec.size.state = Vector2(100, 12)
-	vec.size.tick = Vector2(5, 12)
-	vec.size.stage = Vector2(vec.size.tick)
+	vec.size.state = Vector2(128, 16)
 	
 	vec.size.block = Vector2.ONE * num.cord.l
 	vec.size.sky = Vector2(num.sky.col, num.sky.col) * num.cord.l
@@ -362,6 +438,17 @@ func init_color():
 	color.socket.available = Color.from_hsv(0 / h, 0.0, 0.9)
 	color.socket.incomplete = Color.from_hsv(0 / h, 0.0, 0.6)
 	color.socket.completed = Color.from_hsv(0 / h, 0.0, 0.1)
+	
+	color.state = {}
+	color.state.vigor = {}
+	color.state.vigor.fill = Color.from_hsv(120 / h, 1, 0.9)
+	color.state.vigor.background = Color.from_hsv(120 / h, 0.25, 0.9)
+	color.state.standard = {}
+	color.state.standard.fill = Color.from_hsv(30 / h, 1, 0.9)
+	color.state.standard.background = Color.from_hsv(30 / h, 0.25, 0.9)
+	color.state.fatigue = {}
+	color.state.fatigue.fill = Color.from_hsv(0, 1, 0.9)
+	color.state.fatigue.background = Color.from_hsv(0, 0.25, 0.9)
 
 
 func save(path_: String, data_: String):

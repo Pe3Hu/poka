@@ -1,0 +1,184 @@
+[
+ {
+  "title": "shadows",
+  "action": "upswing",
+  "measure": "limit",
+  "subject": "supervision",
+  "dissemination": "permanently"
+ },
+ {
+  "title": "glow",
+  "action": "lowering",
+  "measure": "limit",
+  "subject": "supervision",
+  "dissemination": "permanently"
+ },
+ {
+  "title": "swords",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "onslaught",
+  "dissemination": "once"
+ },
+ {
+  "title": "sharpness",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "onslaught",
+  "dissemination": "permanently"
+ },
+ {
+  "title": "rust",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "onslaught",
+  "dissemination": "permanently"
+ },
+ {
+  "title": "shields",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "guard",
+  "dissemination": "once"
+ },
+ {
+  "title": "density",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "guard",
+  "dissemination": "constantly"
+ },
+ {
+  "title": "decay",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "guard",
+  "dissemination": "permanently"
+ },
+ {
+  "title": "hymn",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "all"
+ },
+ {
+  "title": "rumor",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "all"
+ },
+ {
+  "title": "heat",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "pressure",
+  "dissemination": "once"
+ },
+ {
+  "title": "chill",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "pressure",
+  "dissemination": "once"
+ },
+ {
+  "title": "vapor",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "boiling",
+  "dissemination": "once"
+ },
+ {
+  "title": "madness",
+  "action": "prevention",
+  "measure": "actuation",
+  "subject": "stun",
+  "dissemination": "once"
+ },
+ {
+  "title": "vigor",
+  "action": "doubling",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "weakest"
+ },
+ {
+  "title": "fatigue",
+  "action": "halving",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "strongest"
+ },
+ {
+  "title": "light",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "health",
+  "dissemination": "once"
+ },
+ {
+  "title": "darkness",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "health",
+  "dissemination": "once"
+ },
+ {
+  "title": "fear",
+  "action": "zeroing",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "weakest"
+ },
+ {
+  "title": "courage",
+  "action": "doubling",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "strongest"
+ },
+ {
+  "title": "reward",
+  "action": "ascension",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "weakest"
+ },
+ {
+  "title": "disgrace",
+  "action": "deposition",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "strongest"
+ },
+ {
+  "title": "joke",
+  "action": "trial",
+  "measure": "value",
+  "subject": "pawn",
+  "dissemination": "randomly"
+ },
+ {
+  "title": "escape",
+  "action": "lowering",
+  "measure": "value",
+  "subject": "wound",
+  "dissemination": "once"
+ },
+ {
+  "title": "ambush",
+  "action": "upswing",
+  "measure": "value",
+  "subject": "wound",
+  "dissemination": "once"
+ },
+ {
+  "title": "verdict",
+  "action": "comparison",
+  "measure": "value",
+  "subject": "health",
+  "dissemination": "permanently"
+ }
+]

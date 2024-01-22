@@ -1,0 +1,170 @@
+[
+ {
+  "title": "heretic",
+  "token": "shadows",
+  "value": 1,
+  "weight": 12,
+  "target": "on other"
+ },
+ {
+  "title": "heretic",
+  "token": "darkness",
+  "value": 4,
+  "weight": 3,
+  "target": "on other"
+ },
+ {
+  "title": "heretic",
+  "token": "chill",
+  "value": 2,
+  "weight": 1,
+  "target": "on himself"
+ },
+ {
+  "title": "priest",
+  "token": "radiance",
+  "value": 1,
+  "weight": 12,
+  "target": "on himself"
+ },
+ {
+  "title": "priest",
+  "token": "light",
+  "value": 3,
+  "weight": 3,
+  "target": "on himself"
+ },
+ {
+  "title": "priest",
+  "token": "heat",
+  "value": 2,
+  "weight": 1,
+  "target": "on himself"
+ },
+ {
+  "title": "assassin",
+  "token": "swords",
+  "value": 2,
+  "weight": 1,
+  "target": "on himself"
+ },
+ {
+  "title": "assassin",
+  "token": "sharpness",
+  "value": 1,
+  "weight": 8,
+  "target": "on himself"
+ },
+ {
+  "title": "assassin",
+  "token": "ambush",
+  "value": 7,
+  "weight": 4,
+  "target": "on himself"
+ },
+ {
+  "title": "bodyguard",
+  "token": "shields",
+  "value": 2,
+  "weight": 1,
+  "target": "on himself"
+ },
+ {
+  "title": "bodyguard",
+  "token": "density",
+  "value": 1,
+  "weight": 8,
+  "target": "on himself"
+ },
+ {
+  "title": "bodyguard",
+  "token": "escape",
+  "value": 5,
+  "weight": 3,
+  "target": "on himself"
+ },
+ {
+  "title": "bard",
+  "token": "hymn",
+  "value": 1,
+  "weight": 5,
+  "target": "on himself"
+ },
+ {
+  "title": "bard",
+  "token": "vigor",
+  "value": 1,
+  "weight": 2,
+  "target": "on himself"
+ },
+ {
+  "title": "bard",
+  "token": "courage",
+  "value": 1,
+  "weight": 3,
+  "target": "on himself"
+ },
+ {
+  "title": "spy",
+  "token": "rumor",
+  "value": 1,
+  "weight": 5,
+  "target": "on other"
+ },
+ {
+  "title": "spy",
+  "token": "fatigue",
+  "value": 1,
+  "weight": 2,
+  "target": "on other"
+ },
+ {
+  "title": "spy",
+  "token": "fear",
+  "value": 1,
+  "weight": 3,
+  "target": "on other"
+ },
+ {
+  "title": "saboteur",
+  "token": "rust",
+  "value": 1,
+  "weight": 8,
+  "target": "on other"
+ },
+ {
+  "title": "saboteur",
+  "token": "decay",
+  "value": 1,
+  "weight": 8,
+  "target": "on other"
+ },
+ {
+  "title": "saboteur",
+  "token": "verdict",
+  "value": 1,
+  "weight": 2,
+  "target": "on other"
+ },
+ {
+  "title": "heir",
+  "token": "reward",
+  "value": 1,
+  "weight": 12,
+  "target": "on himself"
+ },
+ {
+  "title": "heir",
+  "token": "disgrace",
+  "value": 2,
+  "weight": 8,
+  "target": "on other"
+ },
+ {
+  "title": "heir",
+  "token": "joke",
+  "value": 1,
+  "weight": 3,
+  "target": "on other"
+ }
+]

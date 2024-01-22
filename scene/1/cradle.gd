@@ -1,11 +1,14 @@
 extends MarginContainer
 
 
+#region vars
 @onready var pantheons = $Pantheons
 
 var sketch = null
+#endregion
 
 
+#region init
 func set_attributes(input_: Dictionary) -> void:
 	sketch = input_.sketch
 	
@@ -13,10 +16,11 @@ func set_attributes(input_: Dictionary) -> void:
 
 
 func init_pantheons() -> void:
-	for _i in 1:
+	for _i in 2:
 		var input = {}
 		input.cradle = self
 	
 		var pantheon = Global.scene.pantheon.instantiate()
 		pantheons.add_child(pantheon)
 		pantheon.set_attributes(input)
+#endregion

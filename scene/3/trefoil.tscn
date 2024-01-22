@@ -8,3 +8,4 @@ color = Color(0.709804, 0.709804, 0.709804, 1)
 script = ExtResource("1_4uep3")
 
 [node name="Index" parent="." instance=ExtResource("2_81jq7")]
+visible = false

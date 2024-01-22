@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://b6xt38h3tpi5k"]
+[gd_scene load_steps=6 format=3 uid="uid://b6xt38h3tpi5k"]
 
 [ext_resource type="Script" path="res://scene/1/god.gd" id="1_ceqed"]
 [ext_resource type="PackedScene" uid="uid://cv5qkmd5pg33l" path="res://scene/1/vastness.tscn" id="2_4c57p"]
 [ext_resource type="PackedScene" path="res://scene/5/gameboard.tscn" id="3_esv0s"]
+[ext_resource type="PackedScene" path="res://scene/5/health.tscn" id="3_t4bs3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7paps"]
 
@@ -35,5 +36,13 @@ alignment = 1
 [node name="Vastness" parent="HBox" instance=ExtResource("2_4c57p")]
 layout_mode = 2
 
-[node name="Gameboard" parent="HBox" instance=ExtResource("3_esv0s")]
+[node name="VBox" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Health" parent="HBox/VBox" instance=ExtResource("3_t4bs3")]
+layout_mode = 2
+
+[node name="Gameboard" parent="HBox/VBox" instance=ExtResource("3_esv0s")]
 layout_mode = 2

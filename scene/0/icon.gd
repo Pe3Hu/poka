@@ -13,35 +13,32 @@ var subtype = null
 
 #region init
 func set_attributes(input_: Dictionary) -> void:
-	type = input_.type
-	subtype = input_.subtype
+	type  = input_.type
+	subtype  = input_.subtype
 	
 	init_basic_setting()
 
 
 func init_basic_setting() -> void:
-	custom_minimum_size = Vector2(Global.vec.size.letter)
+	custom_minimum_size = Vector2(Global.vec.size.sixteen)
 	var path = "res://asset/png/"
 	var exceptions = ["number"]
 	
 	if !exceptions.has(type):
-		custom_minimum_size = Vector2(Global.vec.size.icon)
-		path += type + "/" + subtype + ".png"
+		custom_minimum_size = Vector2(Global.vec.size[type])
+		path += type + "/" + str(subtype) + ".png"
 		textureRect.texture = load(path)
 	
 	match type:
 		"number":
-			custom_minimum_size = Vector2(Global.vec.size.number)
 			textureRect.visible = false
 			number.visible = true
 			set_number(subtype)
-		"blank":
-			custom_minimum_size = Vector2(Global.vec.size.number)
 #endregion
 
 
-#region number processing 
-func get_number():
+#region number treatment
+func get_number() -> Variant:
 	return subtype
 
 
@@ -80,3 +77,4 @@ func set_number(value_) -> void:
 			value = snapped(value, 0.01)
 			number.text = str(value)
 #endregion
+

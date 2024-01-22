@@ -17,7 +17,8 @@ func _input(event) -> void:
 		match event.keycode:
 			KEY_SPACE:
 				if event.is_pressed() && !event.is_echo():
-					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.oasis.choose_best()
+					sketch.casino.tables.get_child(0).croupier.follow_stage()
+					#sketch.casino.tables.get_child(0).gods.get_child(0).vastness.oasis.choose_best()
 			KEY_A:
 				if event.is_pressed() && !event.is_echo():
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.shift_axises_index(-1)
@@ -33,7 +34,6 @@ func _input(event) -> void:
 			KEY_F:
 				if event.is_pressed() && !event.is_echo():
 					sketch.cradle.pantheons.get_child(0).gods.get_child(0).vastness.soil.subsoil.flip_fusion()
-
 
 
 func _process(delta_) -> void:

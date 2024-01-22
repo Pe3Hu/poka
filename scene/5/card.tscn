@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmqtjipeom15o"]
+[gd_scene load_steps=4 format=3 uid="uid://dpue6pniqnnn2"]
 
 [ext_resource type="Script" path="res://scene/5/card.gd" id="1_p3ovp"]
-[ext_resource type="PackedScene" uid="uid://ciw38iqel0v5a" path="res://scene/0/icon.tscn" id="2_valq8"]
+[ext_resource type="PackedScene" uid="uid://bjxvmtbbkbq1j" path="res://scene/5/suit.tscn" id="2_1jvmv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7paps"]
 bg_color = Color(0.486275, 0.486275, 0.486275, 1)
@@ -28,12 +28,14 @@ visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_7paps")
 
-[node name="Suit" parent="." instance=ExtResource("2_valq8")]
+[node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
+alignment = 1
 
-[node name="Rank" parent="." instance=ExtResource("2_valq8")]
+[node name="Suit" parent="VBox" instance=ExtResource("2_1jvmv")]
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
+
+[node name="Tokens" type="VBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1

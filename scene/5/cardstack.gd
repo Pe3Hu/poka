@@ -1,10 +1,12 @@
 extends MarginContainer
 
 
+#region vars
 @onready var cards = $Cards
 
 var gameboard = null
 var type = null
+#endregion
 
 
 func set_attributes(input_: Dictionary) -> void:
@@ -13,16 +15,16 @@ func set_attributes(input_: Dictionary) -> void:
 
 
 func reshuffle_all_cards() -> void:
-	var cards = []
+	var _cards = []
 	
 	while cards.get_child_count() > 0:
 		var card = cards.get_child(0)
 		cards.remove_child(card)
-		cards.append(card)
+		_cards.append(card)
 	
-	cards.shuffle()
+	_cards.shuffle()
 	
-	for card in cards:
+	for card in _cards:
 		cards.add_child(card)
 
 

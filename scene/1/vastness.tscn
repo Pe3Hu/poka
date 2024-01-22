@@ -30,10 +30,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_7paps")
 
 [node name="VBox" type="VBoxContainer" parent="."]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
 [node name="HBox" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
+theme_override_constants/separation = 0
 alignment = 1
 
 [node name="Horizon" parent="VBox/HBox" instance=ExtResource("2_3a7xf")]
